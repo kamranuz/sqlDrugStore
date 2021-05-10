@@ -1,0 +1,548 @@
+
+CREATE TABLE CityDict
+( 
+	idCountry            integer  NULL ,
+	name                 nvarchar(20)  NULL ,
+	idCity               integer  NOT NULL 
+)
+;
+
+ALTER TABLE CityDict
+	ADD CONSTRAINT XPKCityDict PRIMARY KEY (idCity ASC)
+;
+
+CREATE TABLE CountryDict
+( 
+	idCountry            integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE CountryDict
+	ADD CONSTRAINT XPKCountryDict PRIMARY KEY (idCountry ASC)
+;
+
+CREATE TABLE DetailStatus
+( 
+	barcode              integer  NOT NULL ,
+	idInvoice            integer  NOT NULL ,
+	idOrder              integer  NOT NULL ,
+	idDStatus            integer  NULL ,
+	start                datetime  NOT NULL ,
+	finish               datetime  NULL ,
+	idNInvoice           integer  NOT NULL 
+)
+;
+
+ALTER TABLE DetailStatus
+	ADD CONSTRAINT XPKDetailStatus PRIMARY KEY (barcode ASC,idInvoice ASC,idOrder ASC,start ASC,idNInvoice ASC)
+;
+
+CREATE TABLE DStatusDict
+( 
+	idDStatus            integer  NOT NULL ,
+	name                 varchar(20)  NULL 
+)
+;
+
+ALTER TABLE DStatusDict
+	ADD CONSTRAINT XPKDStatusDict PRIMARY KEY (idDStatus ASC)
+;
+
+CREATE TABLE Employee
+( 
+	idE                  integer  NOT NULL ,
+	name                 varchar(20)  NULL 
+)
+;
+
+ALTER TABLE Employee
+	ADD CONSTRAINT XPKEmployee PRIMARY KEY (idE ASC)
+;
+
+CREATE TABLE InvoiceHeader
+( 
+	idStorage            integer  NULL ,
+	idSupplier           integer  NULL ,
+	idInvoice            integer  NOT NULL ,
+	currentStatus        integer  NULL ,
+	total                integer  NULL 
+)
+;
+
+ALTER TABLE InvoiceHeader
+	ADD CONSTRAINT XPKInvoiceHeader PRIMARY KEY (idInvoice ASC)
+;
+
+CREATE TABLE InvoiceStatus
+( 
+	idInvoice            integer  NOT NULL ,
+	start                datetime  NOT NULL ,
+	finish               datetime  NULL ,
+	idIStatus            integer  NULL 
+)
+;
+
+ALTER TABLE InvoiceStatus
+	ADD CONSTRAINT XPKInvoiceStatus PRIMARY KEY (idInvoice ASC,start ASC)
+;
+
+CREATE TABLE IStatusDict
+( 
+	idIStatus            integer  NOT NULL ,
+	name                 varchar(20)  NULL 
+)
+;
+
+ALTER TABLE IStatusDict
+	ADD CONSTRAINT XPKIStatusDict PRIMARY KEY (idIStatus ASC)
+;
+
+CREATE TABLE ManufacturerDict
+( 
+	idCountry            integer  NULL ,
+	idM                  integer  NOT NULL ,
+	name                 nvarchar(64)  NULL 
+)
+;
+
+ALTER TABLE ManufacturerDict
+	ADD CONSTRAINT XPKManufacturerDict PRIMARY KEY (idM ASC)
+;
+
+CREATE TABLE OrderDetail
+( 
+	barcode              integer  NOT NULL ,
+	idInvoice            integer  NOT NULL ,
+	idOrder              integer  NOT NULL ,
+	qty                  integer  NULL ,
+	idNInvoice           integer  NOT NULL 
+)
+;
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT XPKOrderDetail PRIMARY KEY (barcode ASC,idInvoice ASC,idOrder ASC,idNInvoice ASC)
+;
+
+CREATE TABLE OrderHeader
+( 
+	idOrder              integer  NOT NULL ,
+	currentStatus        integer  NULL ,
+	total                integer  NULL 
+)
+;
+
+ALTER TABLE OrderHeader
+	ADD CONSTRAINT XPKOrderHeader PRIMARY KEY (idOrder ASC)
+;
+
+CREATE TABLE OrderStatus
+( 
+	idOrder              integer  NOT NULL ,
+	idOStatus            integer  NULL ,
+	start                integer  NOT NULL ,
+	finish               datetime  NULL 
+)
+;
+
+ALTER TABLE OrderStatus
+	ADD CONSTRAINT XPKOrderStatus PRIMARY KEY (idOrder ASC,start ASC)
+;
+
+CREATE TABLE OStatusDict
+( 
+	idOStatus            integer  NOT NULL ,
+	name                 varchar(20)  NULL 
+)
+;
+
+ALTER TABLE OStatusDict
+	ADD CONSTRAINT XPKOStatusDict PRIMARY KEY (idOStatus ASC)
+;
+
+CREATE TABLE Product
+( 
+	idP                  char(18)  NULL ,
+	idSupplier           integer  NULL ,
+	barcode              integer  NOT NULL 
+)
+;
+
+ALTER TABLE Product
+	ADD CONSTRAINT XPKProduct PRIMARY KEY (barcode ASC)
+;
+
+CREATE TABLE ProductAlternative
+( 
+	idPA                 integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE ProductAlternative
+	ADD CONSTRAINT XPKProductAlternative PRIMARY KEY (idPA ASC)
+;
+
+CREATE TABLE ProductBuyPrice
+( 
+	barcode              integer  NOT NULL ,
+	start                datetime  NOT NULL ,
+	finish               datetime  NULL ,
+	sellPrice            money  NULL 
+)
+;
+
+ALTER TABLE ProductBuyPrice
+	ADD CONSTRAINT XPKProductBuyPrice PRIMARY KEY (barcode ASC,start ASC)
+;
+
+CREATE TABLE ProductDict
+( 
+	idPA                 integer  NULL ,
+	idPT                 integer  NULL ,
+	divider              integer  NULL ,
+	idM                  integer  NOT NULL ,
+	idP                  char(18)  NOT NULL ,
+	name                 nvarchar(128)  NULL 
+)
+;
+
+ALTER TABLE ProductDict
+	ADD CONSTRAINT XPKProductDict PRIMARY KEY (idP ASC)
+;
+
+CREATE TABLE ProductSellPrice
+( 
+	barcode              integer  NOT NULL ,
+	start                datetime  NOT NULL ,
+	buyPrice             money  NULL ,
+	finish               datetime  NULL 
+)
+;
+
+ALTER TABLE ProductSellPrice
+	ADD CONSTRAINT XPKProductSellPrice PRIMARY KEY (barcode ASC,start ASC)
+;
+
+CREATE TABLE ProductType
+( 
+	idPT                 integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE ProductType
+	ADD CONSTRAINT XPKProductType PRIMARY KEY (idPT ASC)
+;
+
+CREATE TABLE ReservationDetail
+( 
+	barcode              integer  NOT NULL ,
+	idN                  integer  NOT NULL ,
+	qty                  integer  NULL ,
+	idR                  integer  NOT NULL 
+)
+;
+
+ALTER TABLE ReservationDetail
+	ADD CONSTRAINT XPKReservationDetail PRIMARY KEY (barcode ASC,idN ASC,idR ASC)
+;
+
+CREATE TABLE ReservationHeader
+( 
+	idR                  integer  NOT NULL ,
+	idE                  integer  NULL ,
+	saleAbsolute         integer  NULL ,
+	saleRelative         char(18)  NULL ,
+	details              varchar(20)  NULL ,
+	currentStatus        integer  NULL 
+)
+;
+
+ALTER TABLE ReservationHeader
+	ADD CONSTRAINT XPKReservationHeader PRIMARY KEY (idR ASC)
+;
+
+CREATE TABLE ReservationStatus
+( 
+	idR                  integer  NOT NULL ,
+	idRStatus            integer  NULL ,
+	start                datetime  NOT NULL ,
+	finish               datetime  NULL 
+)
+;
+
+ALTER TABLE ReservationStatus
+	ADD CONSTRAINT XPKReservationStatus PRIMARY KEY (idR ASC,start ASC)
+;
+
+CREATE TABLE RStatusDict
+( 
+	idRStatus            integer  NOT NULL ,
+	name                 varchar(20)  NULL 
+)
+;
+
+ALTER TABLE RStatusDict
+	ADD CONSTRAINT XPKRStatusDict PRIMARY KEY (idRStatus ASC)
+;
+
+CREATE TABLE Shop
+( 
+	idCity               integer  NULL ,
+	idShop               integer  NOT NULL ,
+	name                 nvarchar(20)  NULL ,
+	address              varchar(20)  NULL 
+)
+;
+
+ALTER TABLE Shop
+	ADD CONSTRAINT XPKShop PRIMARY KEY (idShop ASC)
+;
+
+CREATE TABLE ShopEmployee
+( 
+	idE                  integer  NOT NULL ,
+	idShop               integer  NOT NULL ,
+	dutyDate             datetime  NOT NULL 
+)
+;
+
+ALTER TABLE ShopEmployee
+	ADD CONSTRAINT XPKShopEmployee PRIMARY KEY (idE ASC,idShop ASC,dutyDate ASC)
+;
+
+CREATE TABLE Storage
+( 
+	idCity               integer  NULL ,
+	idStorage            integer  NOT NULL ,
+	address              varchar(20)  NULL 
+)
+;
+
+ALTER TABLE Storage
+	ADD CONSTRAINT XPKStorage PRIMARY KEY (idStorage ASC)
+;
+
+CREATE TABLE SupplierDict
+( 
+	idCity               integer  NULL ,
+	name                 varchar(20)  NULL ,
+	address              varchar(20)  NULL ,
+	idSupplier           integer  NOT NULL 
+)
+;
+
+ALTER TABLE SupplierDict
+	ADD CONSTRAINT XPKSupplierDict PRIMARY KEY (idSupplier ASC)
+;
+
+
+ALTER TABLE CityDict
+	ADD CONSTRAINT R_24 FOREIGN KEY (idCountry) REFERENCES CountryDict(idCountry)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE DetailStatus
+	ADD CONSTRAINT R_32 FOREIGN KEY (barcode,idInvoice,idOrder,idNInvoice) REFERENCES OrderDetail(barcode,idInvoice,idOrder,idNInvoice)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE DetailStatus
+	ADD CONSTRAINT R_33 FOREIGN KEY (idDStatus) REFERENCES DStatusDict(idDStatus)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE InvoiceHeader
+	ADD CONSTRAINT R_15 FOREIGN KEY (idStorage) REFERENCES Storage(idStorage)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE InvoiceHeader
+	ADD CONSTRAINT R_13 FOREIGN KEY (idSupplier) REFERENCES SupplierDict(idSupplier)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE InvoiceStatus
+	ADD CONSTRAINT R_18 FOREIGN KEY (idInvoice) REFERENCES InvoiceHeader(idInvoice)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE InvoiceStatus
+	ADD CONSTRAINT R_19 FOREIGN KEY (idIStatus) REFERENCES IStatusDict(idIStatus)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ManufacturerDict
+	ADD CONSTRAINT R_23 FOREIGN KEY (idCountry) REFERENCES CountryDict(idCountry)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT R_16 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT R_17 FOREIGN KEY (idInvoice) REFERENCES InvoiceHeader(idInvoice)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT R_20 FOREIGN KEY (idOrder) REFERENCES OrderHeader(idOrder)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderStatus
+	ADD CONSTRAINT R_21 FOREIGN KEY (idOrder) REFERENCES OrderHeader(idOrder)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderStatus
+	ADD CONSTRAINT R_22 FOREIGN KEY (idOStatus) REFERENCES OStatusDict(idOStatus)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE Product
+	ADD CONSTRAINT R_6 FOREIGN KEY (idP) REFERENCES ProductDict(idP)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE Product
+	ADD CONSTRAINT R_7 FOREIGN KEY (idSupplier) REFERENCES SupplierDict(idSupplier)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductBuyPrice
+	ADD CONSTRAINT R_1 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductDict
+	ADD CONSTRAINT R_4 FOREIGN KEY (idPA) REFERENCES ProductAlternative(idPA)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductDict
+	ADD CONSTRAINT R_5 FOREIGN KEY (idPT) REFERENCES ProductType(idPT)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductDict
+	ADD CONSTRAINT R_36 FOREIGN KEY (idM) REFERENCES ManufacturerDict(idM)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductSellPrice
+	ADD CONSTRAINT R_2 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationDetail
+	ADD CONSTRAINT R_35 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationDetail
+	ADD CONSTRAINT R_34 FOREIGN KEY (idR) REFERENCES ReservationHeader(idR)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationHeader
+	ADD CONSTRAINT R_29 FOREIGN KEY (idE) REFERENCES Employee(idE)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationStatus
+	ADD CONSTRAINT R_31 FOREIGN KEY (idR) REFERENCES ReservationHeader(idR)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationStatus
+	ADD CONSTRAINT R_30 FOREIGN KEY (idRStatus) REFERENCES RStatusDict(idRStatus)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE Shop
+	ADD CONSTRAINT R_28 FOREIGN KEY (idCity) REFERENCES CityDict(idCity)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ShopEmployee
+	ADD CONSTRAINT R_25 FOREIGN KEY (idE) REFERENCES Employee(idE)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ShopEmployee
+	ADD CONSTRAINT R_27 FOREIGN KEY (idShop) REFERENCES Shop(idShop)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE Storage
+	ADD CONSTRAINT R_11 FOREIGN KEY (idCity) REFERENCES CityDict(idCity)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE SupplierDict
+	ADD CONSTRAINT R_10 FOREIGN KEY (idCity) REFERENCES CityDict(idCity)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
