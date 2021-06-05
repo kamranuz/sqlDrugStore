@@ -1,4 +1,4 @@
-INSERT INTO ManufacturerDict(idM, name)
+INSERT INTO ManufacturerDict(manufacturer_id, name)
 VALUES
 	(1,N' Ningbo Jin Mao Import and Export Co. Ltd'),
 	(2,N' Алвоген Фарма ООО'),
@@ -998,7 +998,7 @@ VALUES
 	(996,N'Ювикс-Фарм'),
 	(997,N'Юг ФФ ООО');
 
-INSERT INTO ManufacturerDict(idM, name)
+INSERT INTO ManufacturerDict(manufacturer_id, name)
 VALUES
 	(998,N'Южфарм ООО'),
 	(999,N'Юникосметик ООО'),
