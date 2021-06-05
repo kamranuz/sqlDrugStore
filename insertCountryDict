@@ -1,4 +1,4 @@
-INSERT INTO CountryDict(idCountry, name)
+INSERT INTO CountryDict(country_id, name)
 VALUES
 	(0,N'Неизвестная страна'),
 	(1,N'Австралия'),
