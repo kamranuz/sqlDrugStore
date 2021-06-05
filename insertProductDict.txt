@@ -1,4 +1,4 @@
-INSERT INTO ProductDict(idP, idM, name)
+INSERT INTO ProductDict(product_id, manufacturer_id, name)
 VALUES
 	(1,	877,	N'5 Дней крем д/ног 35г от пота и запаха'),
 	(2,	878,	N'5 Дней пудра д/ног 120г'),
@@ -997,7 +997,7 @@ VALUES
 	(995,	800,	N'Гринфлеш Вижион Формула 400 мг № 60 капс'),
 	(996,	800,	N'Гринфлеш Кадио Формула 400 мг № 60 капс'),
 	(997,	800,	N'Гринфлеш Флекс Формула 400 мг № 60 капс');
-INSERT INTO ProductDict(idP, idM, name)
+INSERT INTO ProductDict(product_id, manufacturer_id, name)
 VALUES
 	(998,	951,	N'Гриппферон капли наз 10000МЕ/мл фл-кап 10мл №1'),
 	(999,	951,	N'Гриппферон с Лоратадином мазь наз 5г'),
@@ -1909,7 +1909,7 @@ VALUES
 	(1905,	566,	N'Мезим Форте 10000 таб по кишечнораств   №20'),
 	(1906,	70,	N'Мезим Форте 20000 таб по кишечнораств   №20'),
 	(1907,	69,	N'Мезим Форте таб по №20');
-INSERT INTO ProductDict(idP, idM, name)
+INSERT INTO ProductDict(product_id, manufacturer_id, name)
 VALUES
 	(1908,	69,	N'Мезим Форте таб по №80'),
 	(1909,	927,	N'Мексидол Дент Актив з/паста 100г'),
@@ -2904,7 +2904,7 @@ VALUES
 	(2898,	906,	N'Серная Мазь Простая мазь д/наруж примен 33,3% 25г'),
 	(2899,	284,	N'Сиалис таб ппо 20мг №1'),
 	(2900,	790,	N'Сиалор таб д/р-ра д/местн примен 200мг 10мл №1 + раств-ль');
-INSERT INTO ProductDict(idP, idM, name)
+INSERT INTO ProductDict(product_id, manufacturer_id, name)
 VALUES
 	(2901,	867,	N'Сибирская Клетчатка отруби кукурузные 180г натуральные'),
 	(2902,	450,	N'Сиднофарм таб 2мг №30'),
