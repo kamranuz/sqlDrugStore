@@ -1,4 +1,4 @@
-INSERT INTO ProducTypeDict(productType_id, name)
+INSERT INTO ProductTypeDict(productType_id, name)
 VALUES
 	(1,'Биологически активные добавки'),
 	(2,'Ветеринария'),
