@@ -1,0 +1,23 @@
+INSERT INTO IStatusDict(invoiceStatus_id, name)
+VALUES
+	(1,N'Открыт'),
+	(2,N'Закрыт');
+
+INSERT INTO OStatusDict(orderStatus_id, name)
+VALUES
+	(1,N'Открыт'),
+	(2,N'Закрыт');
+
+INSERT INTO RStatusDict(reservationStatus_id, name)
+VALUES
+	(1,N'На складе'),
+	(2,N'Продан'),
+	(3,N'Удален');
+
+INSERT INTO DStatusDict(detailStatus_id, name)
+VALUES
+	(1,N'Открыт'),
+	(2,N'Закрыт'),
+	(3,N'На складе'),
+	(4,N'Продан'),
+	(5,N'Удален');
