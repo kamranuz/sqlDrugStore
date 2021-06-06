@@ -1,4 +1,4 @@
-INSERT INTO CountryDict(city_id, country_id, name)
+INSERT INTO CityDict(city_id, country_id, name)
 VALUES
 	(1000,0,N'Неизвестный город'),
 	(1001,1,N'Канберра'),
