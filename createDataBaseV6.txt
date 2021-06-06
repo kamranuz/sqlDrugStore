@@ -22,17 +22,6 @@ ALTER TABLE CountryDict
 	ADD CONSTRAINT XPKCountryDict PRIMARY KEY (country_id ASC)
 ;
 
-CREATE TABLE DStatusDict
-( 
-	detailStatus_id      integer  NOT NULL ,
-	name                 nvarchar(20)  NULL 
-)
-;
-
-ALTER TABLE DStatusDict
-	ADD CONSTRAINT XPKDStatusDict PRIMARY KEY (detailStatus_id ASC)
-;
-
 CREATE TABLE Employee
 ( 
 	employee_id          integer  NOT NULL ,
@@ -50,7 +39,8 @@ CREATE TABLE InvoiceHeader
 	invoice_id           integer  NOT NULL ,
 	currentStatus        integer  NULL ,
 	invoiceStatus_id     integer  NULL ,
-	date                 datetime  NULL 
+	date                 datetime  NULL ,
+	shop_id              integer  NULL 
 )
 ;
 
@@ -87,8 +77,7 @@ CREATE TABLE OrderDetail
 	qty                  integer  NULL ,
 	supplier_id          integer  NOT NULL ,
 	product_id           int  NOT NULL ,
-	date                 datetime  NULL ,
-	detailStatus_id      integer  NULL 
+	date                 datetime  NULL 
 )
 ;
 
@@ -101,7 +90,8 @@ CREATE TABLE OrderHeader
 	order_id             integer  NOT NULL ,
 	currentStatus        integer  NULL ,
 	total                integer  NULL ,
-	orderStatus_id       integer  NULL 
+	orderStatus_id       integer  NULL ,
+	shop_id              integer  NULL 
 )
 ;
 
@@ -125,7 +115,8 @@ CREATE TABLE Product
 	product_id           int  NULL ,
 	barcode              integer  NOT NULL ,
 	invoice_id           integer  NULL ,
-	qty                  char(18)  NULL 
+	qty                  char(18)  NULL ,
+	productStatus_id     integer  NULL 
 )
 ;
 
@@ -196,17 +187,27 @@ ALTER TABLE ProductTypeDict
 	ADD CONSTRAINT XPKProductType PRIMARY KEY (productType_id ASC)
 ;
 
+CREATE TABLE PStatusDict
+( 
+	productStatus_id     integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE PStatusDict
+	ADD CONSTRAINT XPKPStatusDict PRIMARY KEY (productStatus_id ASC)
+;
+
 CREATE TABLE ReservationDetail
 ( 
 	barcode              integer  NOT NULL ,
-	reservationN_id      integer  NOT NULL ,
 	qty                  integer  NULL ,
 	reservation_id       integer  NOT NULL 
 )
 ;
 
 ALTER TABLE ReservationDetail
-	ADD CONSTRAINT XPKReservationDetail PRIMARY KEY (barcode ASC,reservationN_id ASC,reservation_id ASC)
+	ADD CONSTRAINT XPKReservationDetail PRIMARY KEY (barcode ASC,reservation_id ASC)
 ;
 
 CREATE TABLE ReservationHeader
@@ -309,6 +310,13 @@ ALTER TABLE InvoiceHeader
 ;
 
 
+ALTER TABLE InvoiceHeader
+	ADD CONSTRAINT R_69 FOREIGN KEY (shop_id) REFERENCES Shop(shop_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
 ALTER TABLE ManufacturerDict
 	ADD CONSTRAINT R_23 FOREIGN KEY (country_id) REFERENCES CountryDict(country_id)
 		ON DELETE NO ACTION
@@ -331,13 +339,6 @@ ALTER TABLE OrderDetail
 
 
 ALTER TABLE OrderDetail
-	ADD CONSTRAINT R_58 FOREIGN KEY (detailStatus_id) REFERENCES DStatusDict(detailStatus_id)
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-;
-
-
-ALTER TABLE OrderDetail
 	ADD CONSTRAINT R_46 FOREIGN KEY (supplier_id) REFERENCES SupplierDict(supplier_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
@@ -346,6 +347,13 @@ ALTER TABLE OrderDetail
 
 ALTER TABLE OrderHeader
 	ADD CONSTRAINT R_51 FOREIGN KEY (orderStatus_id) REFERENCES OStatusDict(orderStatus_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderHeader
+	ADD CONSTRAINT R_70 FOREIGN KEY (shop_id) REFERENCES Shop(shop_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -360,6 +368,13 @@ ALTER TABLE Product
 
 ALTER TABLE Product
 	ADD CONSTRAINT R_45 FOREIGN KEY (invoice_id) REFERENCES InvoiceHeader(invoice_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE Product
+	ADD CONSTRAINT R_71 FOREIGN KEY (productStatus_id) REFERENCES PStatusDict(productStatus_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
