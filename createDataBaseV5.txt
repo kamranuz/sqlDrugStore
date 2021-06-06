@@ -1,8 +1,9 @@
 
+
 CREATE TABLE CityDict
 ( 
 	country_id           integer  NULL ,
-	name                 nvarchar(20)  NULL ,
+	name                 nvarchar(32)  NULL ,
 	city_id              integer  NOT NULL 
 )
 ;
@@ -14,7 +15,7 @@ ALTER TABLE CityDict
 CREATE TABLE CountryDict
 ( 
 	country_id           integer  NOT NULL ,
-	name                 nvarchar(20)  NULL 
+	name                 nvarchar(32)  NULL 
 )
 ;
 
