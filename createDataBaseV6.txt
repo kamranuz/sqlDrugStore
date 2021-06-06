@@ -1,0 +1,463 @@
+
+CREATE TABLE CityDict
+( 
+	country_id           integer  NULL ,
+	name                 nvarchar(32)  NULL ,
+	city_id              integer  NOT NULL 
+)
+;
+
+ALTER TABLE CityDict
+	ADD CONSTRAINT XPKCityDict PRIMARY KEY (city_id ASC)
+;
+
+CREATE TABLE CountryDict
+( 
+	country_id           integer  NOT NULL ,
+	name                 nvarchar(32)  NULL 
+)
+;
+
+ALTER TABLE CountryDict
+	ADD CONSTRAINT XPKCountryDict PRIMARY KEY (country_id ASC)
+;
+
+CREATE TABLE DStatusDict
+( 
+	detailStatus_id      integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE DStatusDict
+	ADD CONSTRAINT XPKDStatusDict PRIMARY KEY (detailStatus_id ASC)
+;
+
+CREATE TABLE Employee
+( 
+	employee_id          integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE Employee
+	ADD CONSTRAINT XPKEmployee PRIMARY KEY (employee_id ASC)
+;
+
+CREATE TABLE InvoiceHeader
+( 
+	supplier_id          integer  NULL ,
+	invoice_id           integer  NOT NULL ,
+	currentStatus        integer  NULL ,
+	invoiceStatus_id     integer  NULL ,
+	date                 datetime  NULL 
+)
+;
+
+ALTER TABLE InvoiceHeader
+	ADD CONSTRAINT XPKInvoiceHeader PRIMARY KEY (invoice_id ASC)
+;
+
+CREATE TABLE IStatusDict
+( 
+	invoiceStatus_id     integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE IStatusDict
+	ADD CONSTRAINT XPKIStatusDict PRIMARY KEY (invoiceStatus_id ASC)
+;
+
+CREATE TABLE ManufacturerDict
+( 
+	country_id           integer  NULL ,
+	manufacturer_id      integer  NOT NULL ,
+	name                 nvarchar(64)  NULL 
+)
+;
+
+ALTER TABLE ManufacturerDict
+	ADD CONSTRAINT XPKManufacturerDict PRIMARY KEY (manufacturer_id ASC)
+;
+
+CREATE TABLE OrderDetail
+( 
+	order_id             integer  NOT NULL ,
+	qty                  integer  NULL ,
+	supplier_id          integer  NOT NULL ,
+	product_id           int  NOT NULL ,
+	date                 datetime  NULL ,
+	detailStatus_id      integer  NULL 
+)
+;
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT XPKOrderDetail PRIMARY KEY (order_id ASC,supplier_id ASC,product_id ASC)
+;
+
+CREATE TABLE OrderHeader
+( 
+	order_id             integer  NOT NULL ,
+	currentStatus        integer  NULL ,
+	total                integer  NULL ,
+	orderStatus_id       integer  NULL 
+)
+;
+
+ALTER TABLE OrderHeader
+	ADD CONSTRAINT XPKOrderHeader PRIMARY KEY (order_id ASC)
+;
+
+CREATE TABLE OStatusDict
+( 
+	orderStatus_id       integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE OStatusDict
+	ADD CONSTRAINT XPKOStatusDict PRIMARY KEY (orderStatus_id ASC)
+;
+
+CREATE TABLE Product
+( 
+	product_id           int  NULL ,
+	barcode              integer  NOT NULL ,
+	invoice_id           integer  NULL ,
+	qty                  char(18)  NULL 
+)
+;
+
+ALTER TABLE Product
+	ADD CONSTRAINT XPKProduct PRIMARY KEY (barcode ASC)
+;
+
+CREATE TABLE ProductBuyPrice
+( 
+	barcode              integer  NOT NULL ,
+	start                datetime  NOT NULL ,
+	finish               datetime  NULL ,
+	sellPrice            money  NULL 
+)
+;
+
+ALTER TABLE ProductBuyPrice
+	ADD CONSTRAINT XPKProductBuyPrice PRIMARY KEY (barcode ASC,start ASC)
+;
+
+CREATE TABLE ProductDict
+( 
+	divider              integer  NULL ,
+	manufacturer_id      integer  NOT NULL ,
+	product_id           int  NOT NULL ,
+	name                 nvarchar(128)  NULL ,
+	productSubType_id    int  NULL 
+)
+;
+
+ALTER TABLE ProductDict
+	ADD CONSTRAINT XPKProductDict PRIMARY KEY (product_id ASC)
+;
+
+CREATE TABLE ProductSellPrice
+( 
+	barcode              integer  NOT NULL ,
+	start                datetime  NOT NULL ,
+	buyPrice             money  NULL ,
+	finish               datetime  NULL 
+)
+;
+
+ALTER TABLE ProductSellPrice
+	ADD CONSTRAINT XPKProductSellPrice PRIMARY KEY (barcode ASC,start ASC)
+;
+
+CREATE TABLE ProductSubTypeDict
+( 
+	productSubType_id    int  NOT NULL ,
+	name                 nvarchar(128)  NULL ,
+	productType_id       int  NULL 
+)
+;
+
+ALTER TABLE ProductSubTypeDict
+	ADD CONSTRAINT XPKProductSubTypeDict PRIMARY KEY (productSubType_id ASC)
+;
+
+CREATE TABLE ProductTypeDict
+( 
+	productType_id       int  NOT NULL ,
+	name                 nvarchar(128)  NOT NULL 
+)
+;
+
+ALTER TABLE ProductTypeDict
+	ADD CONSTRAINT XPKProductType PRIMARY KEY (productType_id ASC)
+;
+
+CREATE TABLE ReservationDetail
+( 
+	barcode              integer  NOT NULL ,
+	reservationN_id      integer  NOT NULL ,
+	qty                  integer  NULL ,
+	reservation_id       integer  NOT NULL 
+)
+;
+
+ALTER TABLE ReservationDetail
+	ADD CONSTRAINT XPKReservationDetail PRIMARY KEY (barcode ASC,reservationN_id ASC,reservation_id ASC)
+;
+
+CREATE TABLE ReservationHeader
+( 
+	reservation_id       integer  NOT NULL ,
+	employee_id          integer  NULL ,
+	saleAbsolute         integer  NULL ,
+	saleRelative         char(18)  NULL ,
+	details              nvarchar(max)  NULL ,
+	reservationStatus_id integer  NULL ,
+	startDate            datetime  NULL ,
+	endDate              char(18)  NULL ,
+	reservationType_id   integer  NULL 
+)
+;
+
+ALTER TABLE ReservationHeader
+	ADD CONSTRAINT XPKReservationHeader PRIMARY KEY (reservation_id ASC)
+;
+
+CREATE TABLE RStatusDict
+( 
+	reservationStatus_id integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE RStatusDict
+	ADD CONSTRAINT XPKRStatusDict PRIMARY KEY (reservationStatus_id ASC)
+;
+
+CREATE TABLE RTypeDict
+( 
+	reservationType_id   integer  NOT NULL ,
+	name                 nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE RTypeDict
+	ADD CONSTRAINT XPKRTypeDict PRIMARY KEY (reservationType_id ASC)
+;
+
+CREATE TABLE Shop
+( 
+	city_id              integer  NULL ,
+	shop_id              integer  NOT NULL ,
+	name                 nvarchar(20)  NULL ,
+	address              nvarchar(20)  NULL 
+)
+;
+
+ALTER TABLE Shop
+	ADD CONSTRAINT XPKShop PRIMARY KEY (shop_id ASC)
+;
+
+CREATE TABLE ShopEmployee
+( 
+	employee_id          integer  NOT NULL ,
+	shop_id              integer  NOT NULL ,
+	dutyDate             datetime  NOT NULL 
+)
+;
+
+ALTER TABLE ShopEmployee
+	ADD CONSTRAINT XPKShopEmployee PRIMARY KEY (employee_id ASC,shop_id ASC,dutyDate ASC)
+;
+
+CREATE TABLE SupplierDict
+( 
+	city_id              integer  NULL ,
+	name                 nvarchar(20)  NULL ,
+	address              nvarchar(20)  NULL ,
+	supplier_id          integer  NOT NULL 
+)
+;
+
+ALTER TABLE SupplierDict
+	ADD CONSTRAINT XPKSupplierDict PRIMARY KEY (supplier_id ASC)
+;
+
+
+ALTER TABLE CityDict
+	ADD CONSTRAINT R_24 FOREIGN KEY (country_id) REFERENCES CountryDict(country_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE InvoiceHeader
+	ADD CONSTRAINT R_53 FOREIGN KEY (invoiceStatus_id) REFERENCES IStatusDict(invoiceStatus_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE InvoiceHeader
+	ADD CONSTRAINT R_13 FOREIGN KEY (supplier_id) REFERENCES SupplierDict(supplier_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ManufacturerDict
+	ADD CONSTRAINT R_23 FOREIGN KEY (country_id) REFERENCES CountryDict(country_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT R_20 FOREIGN KEY (order_id) REFERENCES OrderHeader(order_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT R_47 FOREIGN KEY (product_id) REFERENCES ProductDict(product_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT R_58 FOREIGN KEY (detailStatus_id) REFERENCES DStatusDict(detailStatus_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT R_46 FOREIGN KEY (supplier_id) REFERENCES SupplierDict(supplier_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderHeader
+	ADD CONSTRAINT R_51 FOREIGN KEY (orderStatus_id) REFERENCES OStatusDict(orderStatus_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE Product
+	ADD CONSTRAINT R_6 FOREIGN KEY (product_id) REFERENCES ProductDict(product_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE Product
+	ADD CONSTRAINT R_45 FOREIGN KEY (invoice_id) REFERENCES InvoiceHeader(invoice_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductBuyPrice
+	ADD CONSTRAINT R_1 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductDict
+	ADD CONSTRAINT R_36 FOREIGN KEY (manufacturer_id) REFERENCES ManufacturerDict(manufacturer_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductDict
+	ADD CONSTRAINT R_49 FOREIGN KEY (productSubType_id) REFERENCES ProductSubTypeDict(productSubType_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductSellPrice
+	ADD CONSTRAINT R_2 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ProductSubTypeDict
+	ADD CONSTRAINT R_38 FOREIGN KEY (productType_id) REFERENCES ProductTypeDict(productType_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationDetail
+	ADD CONSTRAINT R_35 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationDetail
+	ADD CONSTRAINT R_34 FOREIGN KEY (reservation_id) REFERENCES ReservationHeader(reservation_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationHeader
+	ADD CONSTRAINT R_29 FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationHeader
+	ADD CONSTRAINT R_52 FOREIGN KEY (reservationStatus_id) REFERENCES RStatusDict(reservationStatus_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ReservationHeader
+	ADD CONSTRAINT R_60 FOREIGN KEY (reservationType_id) REFERENCES RTypeDict(reservationType_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE Shop
+	ADD CONSTRAINT R_28 FOREIGN KEY (city_id) REFERENCES CityDict(city_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ShopEmployee
+	ADD CONSTRAINT R_25 FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE ShopEmployee
+	ADD CONSTRAINT R_27 FOREIGN KEY (shop_id) REFERENCES Shop(shop_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE SupplierDict
+	ADD CONSTRAINT R_10 FOREIGN KEY (city_id) REFERENCES CityDict(city_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
