@@ -14,7 +14,7 @@ VALUES
 	(2,N'Продан'),
 	(3,N'Удален');
 
-INSERT INTO DStatusDict(detailStatus_id, name)
+INSERT INTO PStatusDict(productStatus_id, name)
 VALUES
 	(1,N'Открыт'),
 	(2,N'Закрыт'),
