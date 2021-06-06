@@ -1,0 +1,11 @@
+INSERT INTO Shop(shop_id, city_id, name, address)
+VALUES
+	(1,1062,N'ЗдоровА',N'Шабла тут');
+
+INSERT INTO Employee(employee_id, name)
+VALUES
+	(1,N'Дафна');
+
+INSERT INTO ShopEmployee(employee_id, shop_id, dutyDate)
+VALUES
+	(1,1,'2021-01-01');
