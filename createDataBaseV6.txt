@@ -37,7 +37,6 @@ CREATE TABLE InvoiceHeader
 ( 
 	supplier_id          integer  NULL ,
 	invoice_id           integer  NOT NULL ,
-	currentStatus        integer  NULL ,
 	invoiceStatus_id     integer  NULL ,
 	date                 datetime  NULL ,
 	shop_id              integer  NULL 
@@ -113,9 +112,9 @@ ALTER TABLE OStatusDict
 CREATE TABLE Product
 ( 
 	product_id           int  NULL ,
-	barcode              integer  NOT NULL ,
+	barcode              bigint  NOT NULL ,
 	invoice_id           integer  NULL ,
-	qty                  char(18)  NULL ,
+	qty                  int  NULL ,
 	productStatus_id     integer  NULL 
 )
 ;
@@ -126,7 +125,7 @@ ALTER TABLE Product
 
 CREATE TABLE ProductBuyPrice
 ( 
-	barcode              integer  NOT NULL ,
+	barcode              bigint  NOT NULL ,
 	start                datetime  NOT NULL ,
 	finish               datetime  NULL ,
 	sellPrice            money  NULL 
@@ -153,7 +152,7 @@ ALTER TABLE ProductDict
 
 CREATE TABLE ProductSellPrice
 ( 
-	barcode              integer  NOT NULL ,
+	barcode              bigint  NOT NULL ,
 	start                datetime  NOT NULL ,
 	buyPrice             money  NULL ,
 	finish               datetime  NULL 
@@ -200,7 +199,7 @@ ALTER TABLE PStatusDict
 
 CREATE TABLE ReservationDetail
 ( 
-	barcode              integer  NOT NULL ,
+	barcode              bigint  NOT NULL ,
 	qty                  integer  NULL ,
 	reservation_id       integer  NOT NULL 
 )
