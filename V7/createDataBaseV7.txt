@@ -1,11 +1,9 @@
-INSERT INTO ProductDict(manufacturer_id, nameб divider, productSubType_id)
-VALUES
-	
+
 CREATE TABLE CityDict
 ( 
 	country_id           integer  NULL ,
 	name                 nvarchar(32)  NULL ,
-	city_id              integer IDENTITY ( 1,1 ) 
+	city_id              integer IDENTITY ( 1000,1 ) 
 )
 ;
 
@@ -15,7 +13,7 @@ ALTER TABLE CityDict
 
 CREATE TABLE CountryDict
 ( 
-	country_id           integer IDENTITY ( 1,1 ) ,
+	country_id           integer IDENTITY ( 0,1 ) ,
 	name                 nvarchar(32)  NULL 
 )
 ;
@@ -29,7 +27,8 @@ CREATE TABLE EmploeeDict
 	employee_id          integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(32)  NULL ,
 	surname              nvarchar(32)  NULL ,
-	dob                  datetime  NULL 
+	dob                  datetime  NULL ,
+	salary               money  NULL 
 )
 ;
 
@@ -118,16 +117,16 @@ ALTER TABLE OStatusDict
 CREATE TABLE Product
 ( 
 	product_id           int  NULL ,
-	barcode              int IDENTITY ( 1,1 ) ,
+	barcode              int  NOT NULL ,
 	invoice_id           integer  NULL ,
 	qty                  int  NULL ,
 	productStatus_id     integer  NULL ,
-	shop_id              integer  NULL 
+	shop_id              integer  NOT NULL 
 )
 ;
 
 ALTER TABLE Product
-	ADD CONSTRAINT XPKProduct PRIMARY KEY (barcode ASC)
+	ADD CONSTRAINT XPKProduct PRIMARY KEY (barcode ASC,shop_id ASC)
 ;
 
 CREATE TABLE ProductBuyPrice
@@ -135,12 +134,13 @@ CREATE TABLE ProductBuyPrice
 	barcode              int  NOT NULL ,
 	start                datetime  NOT NULL ,
 	finish               datetime  NULL ,
-	sellPrice            money  NULL 
+	sellPrice            money  NULL ,
+	shop_id              integer  NOT NULL 
 )
 ;
 
 ALTER TABLE ProductBuyPrice
-	ADD CONSTRAINT XPKProductBuyPrice PRIMARY KEY (barcode ASC,start ASC)
+	ADD CONSTRAINT XPKProductBuyPrice PRIMARY KEY (barcode ASC,start ASC,shop_id ASC)
 ;
 
 CREATE TABLE ProductDict
@@ -162,12 +162,13 @@ CREATE TABLE ProductSellPrice
 	barcode              int  NOT NULL ,
 	start                datetime  NOT NULL ,
 	buyPrice             money  NULL ,
-	finish               datetime  NULL 
+	finish               datetime  NULL ,
+	shop_id              integer  NOT NULL 
 )
 ;
 
 ALTER TABLE ProductSellPrice
-	ADD CONSTRAINT XPKProductSellPrice PRIMARY KEY (barcode ASC,start ASC)
+	ADD CONSTRAINT XPKProductSellPrice PRIMARY KEY (barcode ASC,start ASC,shop_id ASC)
 ;
 
 CREATE TABLE ProductSubTypeDict
@@ -389,7 +390,7 @@ ALTER TABLE Product
 
 
 ALTER TABLE ProductBuyPrice
-	ADD CONSTRAINT R_1 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+	ADD CONSTRAINT R_1 FOREIGN KEY (barcode,shop_id) REFERENCES Product(barcode,shop_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -410,7 +411,7 @@ ALTER TABLE ProductDict
 
 
 ALTER TABLE ProductSellPrice
-	ADD CONSTRAINT R_2 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+	ADD CONSTRAINT R_2 FOREIGN KEY (barcode,shop_id) REFERENCES Product(barcode,shop_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -424,7 +425,7 @@ ALTER TABLE ProductSubTypeDict
 
 
 ALTER TABLE ReservationDetail
-	ADD CONSTRAINT R_35 FOREIGN KEY (barcode) REFERENCES Product(barcode)
+	ADD CONSTRAINT R_35 FOREIGN KEY (barcode,shop_id) REFERENCES Product(barcode,shop_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
