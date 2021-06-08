@@ -1,0 +1,11 @@
+INSERT INTO ShopDict (city_id, name, address)
+VALUES
+	(1062,N'ЗдоровА',N'Шабла тут');
+
+INSERT INTO EmployeeDict (name,surname,dob,salary)
+VALUES
+	(N'Дафна', N'Олегова', '1997-02-03', 100501);
+
+INSERT INTO ShopEmployee (employee_id, shop_id, dutyDate)
+VALUES
+	(1,1,'2021-01-01');
