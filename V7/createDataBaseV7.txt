@@ -1,9 +1,11 @@
-
+INSERT INTO ProductDict(manufacturer_id, nameб divider, productSubType_id)
+VALUES
+	
 CREATE TABLE CityDict
 ( 
 	country_id           integer  NULL ,
 	name                 nvarchar(32)  NULL ,
-	city_id              integer  NOT NULL 
+	city_id              integer IDENTITY ( 1,1 ) 
 )
 ;
 
@@ -13,7 +15,7 @@ ALTER TABLE CityDict
 
 CREATE TABLE CountryDict
 ( 
-	country_id           integer  NOT NULL ,
+	country_id           integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(32)  NULL 
 )
 ;
@@ -24,7 +26,7 @@ ALTER TABLE CountryDict
 
 CREATE TABLE EmploeeDict
 ( 
-	employee_id          integer  NOT NULL ,
+	employee_id          integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(32)  NULL ,
 	surname              nvarchar(32)  NULL ,
 	dob                  datetime  NULL 
@@ -51,7 +53,7 @@ ALTER TABLE InvoiceHeader
 
 CREATE TABLE IStatusDict
 ( 
-	invoiceStatus_id     integer  NOT NULL ,
+	invoiceStatus_id     integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(20)  NULL 
 )
 ;
@@ -63,7 +65,7 @@ ALTER TABLE IStatusDict
 CREATE TABLE ManufacturerDict
 ( 
 	country_id           integer  NULL ,
-	manufacturer_id      integer  NOT NULL ,
+	manufacturer_id      integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(64)  NULL 
 )
 ;
@@ -104,7 +106,7 @@ ALTER TABLE OrderHeader
 
 CREATE TABLE OStatusDict
 ( 
-	orderStatus_id       integer  NOT NULL ,
+	orderStatus_id       integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(20)  NULL 
 )
 ;
@@ -116,7 +118,7 @@ ALTER TABLE OStatusDict
 CREATE TABLE Product
 ( 
 	product_id           int  NULL ,
-	barcode              bigint  NOT NULL ,
+	barcode              int IDENTITY ( 1,1 ) ,
 	invoice_id           integer  NULL ,
 	qty                  int  NULL ,
 	productStatus_id     integer  NULL ,
@@ -130,7 +132,7 @@ ALTER TABLE Product
 
 CREATE TABLE ProductBuyPrice
 ( 
-	barcode              bigint  NOT NULL ,
+	barcode              int  NOT NULL ,
 	start                datetime  NOT NULL ,
 	finish               datetime  NULL ,
 	sellPrice            money  NULL 
@@ -145,7 +147,7 @@ CREATE TABLE ProductDict
 ( 
 	divider              integer  NULL ,
 	manufacturer_id      integer  NOT NULL ,
-	product_id           int  NOT NULL ,
+	product_id           int IDENTITY ( 1,1 ) ,
 	name                 nvarchar(128)  NULL ,
 	productSubType_id    int  NULL 
 )
@@ -157,7 +159,7 @@ ALTER TABLE ProductDict
 
 CREATE TABLE ProductSellPrice
 ( 
-	barcode              bigint  NOT NULL ,
+	barcode              int  NOT NULL ,
 	start                datetime  NOT NULL ,
 	buyPrice             money  NULL ,
 	finish               datetime  NULL 
@@ -170,7 +172,7 @@ ALTER TABLE ProductSellPrice
 
 CREATE TABLE ProductSubTypeDict
 ( 
-	productSubType_id    int  NOT NULL ,
+	productSubType_id    int IDENTITY ( 1,1 ) ,
 	name                 nvarchar(128)  NULL ,
 	productType_id       int  NULL 
 )
@@ -182,7 +184,7 @@ ALTER TABLE ProductSubTypeDict
 
 CREATE TABLE ProductTypeDict
 ( 
-	productType_id       int  NOT NULL ,
+	productType_id       int IDENTITY ( 1,1 ) ,
 	name                 nvarchar(128)  NOT NULL 
 )
 ;
@@ -193,7 +195,7 @@ ALTER TABLE ProductTypeDict
 
 CREATE TABLE PStatusDict
 ( 
-	productStatus_id     integer  NOT NULL ,
+	productStatus_id     integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(20)  NULL 
 )
 ;
@@ -204,7 +206,7 @@ ALTER TABLE PStatusDict
 
 CREATE TABLE ReservationDetail
 ( 
-	barcode              bigint  NOT NULL ,
+	barcode              int  NOT NULL ,
 	qty                  integer  NULL ,
 	reservation_id       integer  NOT NULL ,
 	shop_id              integer  NOT NULL 
@@ -236,7 +238,7 @@ ALTER TABLE ReservationHeader
 
 CREATE TABLE RStatusDict
 ( 
-	reservationStatus_id integer  NOT NULL ,
+	reservationStatus_id integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(20)  NULL 
 )
 ;
@@ -247,7 +249,7 @@ ALTER TABLE RStatusDict
 
 CREATE TABLE RTypeDict
 ( 
-	reservationType_id   integer  NOT NULL ,
+	reservationType_id   integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(20)  NULL 
 )
 ;
@@ -258,7 +260,7 @@ ALTER TABLE RTypeDict
 
 CREATE TABLE ShopDict
 ( 
-	shop_id              integer  NOT NULL ,
+	shop_id              integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(32)  NULL ,
 	address              nvarchar(128)  NULL ,
 	city_id              integer  NULL 
@@ -286,7 +288,7 @@ CREATE TABLE SupplierDict
 	city_id              integer  NULL ,
 	name                 nvarchar(20)  NULL ,
 	address              nvarchar(20)  NULL ,
-	supplier_id          integer  NOT NULL 
+	supplier_id          integer IDENTITY ( 1,1 ) 
 )
 ;
 
