@@ -1,0 +1,23 @@
+INSERT INTO IStatusDict (name)
+VALUES
+	(N'Открыт'),
+	(N'Закрыт');
+
+INSERT INTO OStatusDict (name)
+VALUES
+	(N'Открыт'),
+	(N'Закрыт');
+
+INSERT INTO RStatusDict (name)
+VALUES
+	(N'На складе'),
+	(N'Продан'),
+	(N'Удален');
+
+INSERT INTO PStatusDict (name)
+VALUES
+	(N'Открыт'),
+	(N'Закрыт'),
+	(N'На складе'),
+	(N'Продан'),
+	(N'Удален');
