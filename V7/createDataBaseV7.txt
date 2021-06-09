@@ -78,7 +78,6 @@ CREATE TABLE OrderDetail
 	order_id             integer  NOT NULL ,
 	qty                  integer  NULL ,
 	product_id           int  NOT NULL ,
-	date                 datetime  NULL ,
 	shop_id              integer  NOT NULL ,
 	supplier_id          integer  NOT NULL 
 )
@@ -91,11 +90,11 @@ ALTER TABLE OrderDetail
 CREATE TABLE OrderHeader
 ( 
 	order_id             integer  NOT NULL ,
-	currentStatus        integer  NULL ,
 	total                integer  NULL ,
 	orderStatus_id       integer  NULL ,
 	shop_id              integer  NOT NULL ,
-	supplier_id          integer  NOT NULL 
+	supplier_id          integer  NOT NULL ,
+	date                 datetime  NULL 
 )
 ;
 
