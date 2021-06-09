@@ -1,0 +1,31 @@
+CREATE FUNCTION func_total_revenue 
+(@shop int)
+returns float
+as 
+begin
+	DECLARE @totalrevenue as FLOAT
+	SET @totalrevenue=
+	(
+		SELECT sum(psp.sellPrice * rd.qty)
+		from ProductSellPrice psp 
+		inner join ReservationDetail rd 
+		on psp.shop_id = rd.shop_id 
+		inner join ReservationHeader rh 
+		on rd.reservation_id  = rh.reservation_id 
+		where (psp.barcode = rd.barcode) and (rh.reservationStatus_id = 2) and (psp.shop_id = @shop)
+	)
+	RETURN (@totalrevenue)
+end
+select dbo.func_total_revenue(1) as Total_Revenue;
+
+create FUNCTION func_shop_count
+(@city_id int)
+returns int 
+AS 
+begin 
+	DECLARE @totalnumber int 
+	set @totalnumber = (select count(*) from ShopDict where city_id = @city_id)
+	RETURN (@totalnumber)
+end
+
+select dbo.func_shop_count(1007) as Total_Number_of_Shops;
