@@ -93,13 +93,12 @@ CREATE TABLE OrderHeader
 	total                integer  NULL ,
 	orderStatus_id       integer  NULL ,
 	shop_id              integer  NOT NULL ,
-	supplier_id          integer  NOT NULL ,
 	date                 datetime  NULL 
 )
 ;
 
 ALTER TABLE OrderHeader
-	ADD CONSTRAINT XPKOrderHeader PRIMARY KEY (order_id ASC,shop_id ASC,supplier_id ASC)
+	ADD CONSTRAINT XPKOrderHeader PRIMARY KEY (order_id ASC,shop_id ASC)
 ;
 
 CREATE TABLE OStatusDict
@@ -333,7 +332,7 @@ ALTER TABLE ManufacturerDict
 
 
 ALTER TABLE OrderDetail
-	ADD CONSTRAINT R_20 FOREIGN KEY (order_id,shop_id,supplier_id) REFERENCES OrderHeader(order_id,shop_id,supplier_id)
+	ADD CONSTRAINT R_20 FOREIGN KEY (order_id,shop_id) REFERENCES OrderHeader(order_id,shop_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -341,6 +340,13 @@ ALTER TABLE OrderDetail
 
 ALTER TABLE OrderDetail
 	ADD CONSTRAINT R_47 FOREIGN KEY (product_id) REFERENCES ProductDict(product_id)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+;
+
+
+ALTER TABLE OrderDetail
+	ADD CONSTRAINT R_84 FOREIGN KEY (supplier_id) REFERENCES SupplierDict(supplier_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -355,13 +361,6 @@ ALTER TABLE OrderHeader
 
 ALTER TABLE OrderHeader
 	ADD CONSTRAINT R_78 FOREIGN KEY (shop_id) REFERENCES ShopDict(shop_id)
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-;
-
-
-ALTER TABLE OrderHeader
-	ADD CONSTRAINT R_81 FOREIGN KEY (supplier_id) REFERENCES SupplierDict(supplier_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
