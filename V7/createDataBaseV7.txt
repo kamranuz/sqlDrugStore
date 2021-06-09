@@ -22,7 +22,7 @@ ALTER TABLE CountryDict
 	ADD CONSTRAINT XPKCountryDict PRIMARY KEY (country_id ASC)
 ;
 
-CREATE TABLE EmployeDict
+CREATE TABLE EmployeeDict
 ( 
 	employee_id          integer IDENTITY ( 1,1 ) ,
 	name                 nvarchar(32)  NULL ,
@@ -32,7 +32,7 @@ CREATE TABLE EmployeDict
 )
 ;
 
-ALTER TABLE EmployeDict
+ALTER TABLE EmployeeDict
 	ADD CONSTRAINT XPKEmploeeDict PRIMARY KEY (employee_id ASC)
 ;
 
@@ -460,7 +460,7 @@ ALTER TABLE ReservationHeader
 
 
 ALTER TABLE ReservationHeader
-	ADD CONSTRAINT R_79 FOREIGN KEY (employee_id) REFERENCES EmployeDict(employee_id)
+	ADD CONSTRAINT R_79 FOREIGN KEY (employee_id) REFERENCES EmployeeDict(employee_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -481,7 +481,7 @@ ALTER TABLE ShopEmployee
 
 
 ALTER TABLE ShopEmployee
-	ADD CONSTRAINT R_80 FOREIGN KEY (employee_id) REFERENCES EmployeDict(employee_id)
+	ADD CONSTRAINT R_80 FOREIGN KEY (employee_id) REFERENCES EmployeeDict(employee_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
