@@ -42,13 +42,12 @@ CREATE TABLE InvoiceHeader
 	invoice_id           integer  NOT NULL ,
 	invoiceStatus_id     integer  NULL ,
 	date                 datetime  NULL ,
-	shop_id              integer  NOT NULL ,
 	total                money  NULL 
 )
 ;
 
 ALTER TABLE InvoiceHeader
-	ADD CONSTRAINT XPKInvoiceHeader PRIMARY KEY (invoice_id ASC,shop_id ASC)
+	ADD CONSTRAINT XPKInvoiceHeader PRIMARY KEY (invoice_id ASC)
 ;
 
 CREATE TABLE IStatusDict
@@ -79,26 +78,24 @@ CREATE TABLE OrderDetail
 	order_id             integer  NOT NULL ,
 	qty                  integer  NULL ,
 	product_id           int  NOT NULL ,
-	shop_id              integer  NOT NULL ,
 	supplier_id          integer  NOT NULL 
 )
 ;
 
 ALTER TABLE OrderDetail
-	ADD CONSTRAINT XPKOrderDetail PRIMARY KEY (order_id ASC,product_id ASC,shop_id ASC,supplier_id ASC)
+	ADD CONSTRAINT XPKOrderDetail PRIMARY KEY (order_id ASC,product_id ASC,supplier_id ASC)
 ;
 
 CREATE TABLE OrderHeader
 ( 
 	order_id             integer  NOT NULL ,
 	orderStatus_id       integer  NULL ,
-	shop_id              integer  NOT NULL ,
 	date                 datetime  NULL 
 )
 ;
 
 ALTER TABLE OrderHeader
-	ADD CONSTRAINT XPKOrderHeader PRIMARY KEY (order_id ASC,shop_id ASC)
+	ADD CONSTRAINT XPKOrderHeader PRIMARY KEY (order_id ASC)
 ;
 
 CREATE TABLE OStatusDict
@@ -118,13 +115,12 @@ CREATE TABLE Product
 	barcode              int  NOT NULL ,
 	invoice_id           integer  NULL ,
 	qty                  int  NULL ,
-	productStatus_id     integer  NULL ,
-	shop_id              integer  NOT NULL 
+	productStatus_id     integer  NULL 
 )
 ;
 
 ALTER TABLE Product
-	ADD CONSTRAINT XPKProduct PRIMARY KEY (barcode ASC,shop_id ASC)
+	ADD CONSTRAINT XPKProduct PRIMARY KEY (barcode ASC)
 ;
 
 CREATE TABLE ProductBuyPrice
@@ -132,13 +128,12 @@ CREATE TABLE ProductBuyPrice
 	barcode              int  NOT NULL ,
 	start                datetime  NOT NULL ,
 	finish               datetime  NULL ,
-	buyPrice             money  NULL ,
-	shop_id              integer  NOT NULL 
+	buyPrice             money  NULL 
 )
 ;
 
 ALTER TABLE ProductBuyPrice
-	ADD CONSTRAINT XPKProductBuyPrice PRIMARY KEY (barcode ASC,start ASC,shop_id ASC)
+	ADD CONSTRAINT XPKProductBuyPrice PRIMARY KEY (barcode ASC,start ASC)
 ;
 
 CREATE TABLE ProductDict
@@ -160,13 +155,12 @@ CREATE TABLE ProductSellPrice
 	barcode              int  NOT NULL ,
 	start                datetime  NOT NULL ,
 	sellPrice            money  NULL ,
-	finish               datetime  NULL ,
-	shop_id              integer  NOT NULL 
+	finish               datetime  NULL 
 )
 ;
 
 ALTER TABLE ProductSellPrice
-	ADD CONSTRAINT XPKProductSellPrice PRIMARY KEY (barcode ASC,start ASC,shop_id ASC)
+	ADD CONSTRAINT XPKProductSellPrice PRIMARY KEY (barcode ASC,start ASC)
 ;
 
 CREATE TABLE ProductSubTypeDict
@@ -207,32 +201,30 @@ CREATE TABLE ReservationDetail
 ( 
 	barcode              int  NOT NULL ,
 	qty                  integer  NULL ,
-	reservation_id       integer  NOT NULL ,
-	shop_id              integer  NOT NULL 
+	reservation_id       integer  NOT NULL 
 )
 ;
 
 ALTER TABLE ReservationDetail
-	ADD CONSTRAINT XPKReservationDetail PRIMARY KEY (barcode ASC,reservation_id ASC,shop_id ASC)
+	ADD CONSTRAINT XPKReservationDetail PRIMARY KEY (barcode ASC,reservation_id ASC)
 ;
 
 CREATE TABLE ReservationHeader
 ( 
 	reservation_id       integer  NOT NULL ,
-	saleAbsolute         integer  NULL ,
-	saleRelative         char(18)  NULL ,
+	saleAbsolute         money  NULL ,
+	saleRelative         decimal(10,2)  NULL ,
 	details              nvarchar(max)  NULL ,
 	reservationStatus_id integer  NULL ,
 	startDate            datetime  NULL ,
 	endDate              char(18)  NULL ,
 	reservationType_id   integer  NULL ,
-	shop_id              integer  NOT NULL ,
 	employee_id          integer  NULL 
 )
 ;
 
 ALTER TABLE ReservationHeader
-	ADD CONSTRAINT XPKReservationHeader PRIMARY KEY (reservation_id ASC,shop_id ASC)
+	ADD CONSTRAINT XPKReservationHeader PRIMARY KEY (reservation_id ASC)
 ;
 
 CREATE TABLE RStatusDict
@@ -255,31 +247,6 @@ CREATE TABLE RTypeDict
 
 ALTER TABLE RTypeDict
 	ADD CONSTRAINT XPKRTypeDict PRIMARY KEY (reservationType_id ASC)
-;
-
-CREATE TABLE ShopDict
-( 
-	shop_id              integer IDENTITY ( 1,1 ) ,
-	name                 nvarchar(32)  NULL ,
-	address              nvarchar(128)  NULL ,
-	city_id              integer  NULL 
-)
-;
-
-ALTER TABLE ShopDict
-	ADD CONSTRAINT XPKShopDict PRIMARY KEY (shop_id ASC)
-;
-
-CREATE TABLE ShopEmployee
-( 
-	dutyDate             datetime  NOT NULL ,
-	shop_id              integer  NOT NULL ,
-	employee_id          integer  NOT NULL 
-)
-;
-
-ALTER TABLE ShopEmployee
-	ADD CONSTRAINT XPKShopEmployee PRIMARY KEY (dutyDate ASC,shop_id ASC,employee_id ASC)
 ;
 
 CREATE TABLE SupplierDict
@@ -317,13 +284,6 @@ ALTER TABLE InvoiceHeader
 ;
 
 
-ALTER TABLE InvoiceHeader
-	ADD CONSTRAINT R_75 FOREIGN KEY (shop_id) REFERENCES ShopDict(shop_id)
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-;
-
-
 ALTER TABLE ManufacturerDict
 	ADD CONSTRAINT R_23 FOREIGN KEY (country_id) REFERENCES CountryDict(country_id)
 		ON DELETE NO ACTION
@@ -332,7 +292,7 @@ ALTER TABLE ManufacturerDict
 
 
 ALTER TABLE OrderDetail
-	ADD CONSTRAINT R_20 FOREIGN KEY (order_id,shop_id) REFERENCES OrderHeader(order_id,shop_id)
+	ADD CONSTRAINT R_20 FOREIGN KEY (order_id) REFERENCES OrderHeader(order_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -359,13 +319,6 @@ ALTER TABLE OrderHeader
 ;
 
 
-ALTER TABLE OrderHeader
-	ADD CONSTRAINT R_78 FOREIGN KEY (shop_id) REFERENCES ShopDict(shop_id)
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-;
-
-
 ALTER TABLE Product
 	ADD CONSTRAINT R_6 FOREIGN KEY (product_id) REFERENCES ProductDict(product_id)
 		ON DELETE NO ACTION
@@ -374,7 +327,7 @@ ALTER TABLE Product
 
 
 ALTER TABLE Product
-	ADD CONSTRAINT R_45 FOREIGN KEY (invoice_id,shop_id) REFERENCES InvoiceHeader(invoice_id,shop_id)
+	ADD CONSTRAINT R_45 FOREIGN KEY (invoice_id) REFERENCES InvoiceHeader(invoice_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -388,7 +341,7 @@ ALTER TABLE Product
 
 
 ALTER TABLE ProductBuyPrice
-	ADD CONSTRAINT R_1 FOREIGN KEY (barcode,shop_id) REFERENCES Product(barcode,shop_id)
+	ADD CONSTRAINT R_1 FOREIGN KEY (barcode) REFERENCES Product(barcode)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -409,7 +362,7 @@ ALTER TABLE ProductDict
 
 
 ALTER TABLE ProductSellPrice
-	ADD CONSTRAINT R_2 FOREIGN KEY (barcode,shop_id) REFERENCES Product(barcode,shop_id)
+	ADD CONSTRAINT R_2 FOREIGN KEY (barcode) REFERENCES Product(barcode)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -423,14 +376,14 @@ ALTER TABLE ProductSubTypeDict
 
 
 ALTER TABLE ReservationDetail
-	ADD CONSTRAINT R_35 FOREIGN KEY (barcode,shop_id) REFERENCES Product(barcode,shop_id)
+	ADD CONSTRAINT R_35 FOREIGN KEY (barcode) REFERENCES Product(barcode)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
 
 
 ALTER TABLE ReservationDetail
-	ADD CONSTRAINT R_34 FOREIGN KEY (reservation_id,shop_id) REFERENCES ReservationHeader(reservation_id,shop_id)
+	ADD CONSTRAINT R_34 FOREIGN KEY (reservation_id) REFERENCES ReservationHeader(reservation_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -451,35 +404,7 @@ ALTER TABLE ReservationHeader
 
 
 ALTER TABLE ReservationHeader
-	ADD CONSTRAINT R_76 FOREIGN KEY (shop_id) REFERENCES ShopDict(shop_id)
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-;
-
-
-ALTER TABLE ReservationHeader
 	ADD CONSTRAINT R_79 FOREIGN KEY (employee_id) REFERENCES EmployeeDict(employee_id)
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-;
-
-
-ALTER TABLE ShopDict
-	ADD CONSTRAINT R_73 FOREIGN KEY (city_id) REFERENCES CityDict(city_id)
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-;
-
-
-ALTER TABLE ShopEmployee
-	ADD CONSTRAINT R_74 FOREIGN KEY (shop_id) REFERENCES ShopDict(shop_id)
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-;
-
-
-ALTER TABLE ShopEmployee
-	ADD CONSTRAINT R_80 FOREIGN KEY (employee_id) REFERENCES EmployeeDict(employee_id)
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
@@ -490,5 +415,3 @@ ALTER TABLE SupplierDict
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
-
-
