@@ -42,7 +42,8 @@ CREATE TABLE InvoiceHeader
 	invoice_id           integer  NOT NULL ,
 	invoiceStatus_id     integer  NULL ,
 	date                 datetime  NULL ,
-	shop_id              integer  NOT NULL 
+	shop_id              integer  NOT NULL ,
+	total                money  NULL 
 )
 ;
 
@@ -90,7 +91,6 @@ ALTER TABLE OrderDetail
 CREATE TABLE OrderHeader
 ( 
 	order_id             integer  NOT NULL ,
-	total                integer  NULL ,
 	orderStatus_id       integer  NULL ,
 	shop_id              integer  NOT NULL ,
 	date                 datetime  NULL 
@@ -490,3 +490,5 @@ ALTER TABLE SupplierDict
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 ;
+
+
