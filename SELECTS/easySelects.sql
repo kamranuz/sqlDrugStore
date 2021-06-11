@@ -1,3 +1,14 @@
--- Easy select 1. The sum of all invoices in 2021
-SELECT SUM(total) FROM InvoiceHeader
+-- Easy select with condition and math  1. || All propereties of sum of invoices in 2021
+SELECT 
+  COUNT(total) 'количество', 
+  AVG(total) 'средняя сумма', 
+  MAX(total) 'максимальная сумма', 
+  MIN(total) 'минимальная сумма', 
+  SUM(total) 'сумма всех инвойсов', 
+  STDEV(total) 'стандартное отклонение суммы'
+FROM InvoiceHeader
 WHERE date BETWEEN  '2021-01-01' and '2022-01-01';
+
+-- Easy select with condition and math 2. || The list of invoices, which is the sum is  in 2021
+SELECT * FROM InvoiceHeader
+WHERE total NOT BETWEEN total-3* STDEV(total) and total+3* STDEV(total);
