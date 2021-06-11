@@ -1,0 +1,413 @@
+
+CREATE TABLE CityDict
+(
+	country_id           INTEGER NULL,
+	name                 VARCHAR(32) NULL,
+	city_id              INTEGER AUTO_INCREMENT
+);
+
+
+
+ALTER TABLE CityDict
+ADD PRIMARY KEY (city_id);
+
+
+
+CREATE TABLE CountryDict
+(
+	country_id           INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(32) NULL
+);
+
+
+
+ALTER TABLE CountryDict
+ADD PRIMARY KEY (country_id);
+
+
+
+CREATE TABLE EmployeeDict
+(
+	employee_id          INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(32) NULL,
+	surname              VARCHAR(32) NULL,
+	dob                  DATE NULL,
+	salary               DECIMAL(19,4) NULL
+);
+
+
+
+ALTER TABLE EmployeeDict
+ADD PRIMARY KEY (employee_id);
+
+
+
+CREATE TABLE InvoiceHeader
+(
+	supplier_id          INTEGER NULL,
+	invoice_id           INTEGER NOT NULL,
+	invoiceStatus_id     INTEGER NULL,
+	date                 DATE NULL,
+	total                DECIMAL(19,4) NULL
+);
+
+
+
+ALTER TABLE InvoiceHeader
+ADD PRIMARY KEY (invoice_id);
+
+
+
+CREATE TABLE IStatusDict
+(
+	invoiceStatus_id     INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(20) NULL
+);
+
+
+
+ALTER TABLE IStatusDict
+ADD PRIMARY KEY (invoiceStatus_id);
+
+
+
+CREATE TABLE ManufacturerDict
+(
+	country_id           INTEGER NULL,
+	manufacturer_id      INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(64) NULL
+);
+
+
+
+ALTER TABLE ManufacturerDict
+ADD PRIMARY KEY (manufacturer_id);
+
+
+
+CREATE TABLE OrderDetail
+(
+	order_id             INTEGER NOT NULL,
+	qty                  INTEGER NULL,
+	product_id           INTEGER NOT NULL,
+	supplier_id          INTEGER NOT NULL
+);
+
+
+
+ALTER TABLE OrderDetail
+ADD PRIMARY KEY (order_id,product_id,supplier_id);
+
+
+
+CREATE TABLE OrderHeader
+(
+	order_id             INTEGER NOT NULL,
+	orderStatus_id       INTEGER NULL,
+	date                 DATE NULL
+);
+
+
+
+ALTER TABLE OrderHeader
+ADD PRIMARY KEY (order_id);
+
+
+
+CREATE TABLE OStatusDict
+(
+	orderStatus_id       INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(20) NULL
+);
+
+
+
+ALTER TABLE OStatusDict
+ADD PRIMARY KEY (orderStatus_id);
+
+
+
+CREATE TABLE Product
+(
+	product_id           INTEGER NULL,
+	barcode              INTEGER NOT NULL,
+	invoice_id           INTEGER NULL,
+	qty                  INTEGER NULL,
+	productStatus_id     INTEGER NULL
+);
+
+
+
+ALTER TABLE Product
+ADD PRIMARY KEY (barcode);
+
+
+
+CREATE TABLE ProductBuyPrice
+(
+	barcode              INTEGER NOT NULL,
+	start                DATE NOT NULL,
+	finish               DATE NULL,
+	buyPrice             DECIMAL(19,4) NULL
+);
+
+
+
+ALTER TABLE ProductBuyPrice
+ADD PRIMARY KEY (barcode,start);
+
+
+
+CREATE TABLE ProductDict
+(
+	divider              INTEGER NULL,
+	manufacturer_id      INTEGER NULL,
+	product_id           INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(128) NULL,
+	productSubType_id    INTEGER NULL
+);
+
+
+
+ALTER TABLE ProductDict
+ADD PRIMARY KEY (product_id);
+
+
+
+CREATE TABLE ProductSellPrice
+(
+	barcode              INTEGER NOT NULL,
+	start                DATE NOT NULL,
+	sellPrice            DECIMAL(19,4) NULL,
+	finish               DATE NULL
+);
+
+
+
+ALTER TABLE ProductSellPrice
+ADD PRIMARY KEY (barcode,start);
+
+
+
+CREATE TABLE ProductSubTypeDict
+(
+	productSubType_id    INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(128) NULL,
+	productType_id       INTEGER NULL
+);
+
+
+
+ALTER TABLE ProductSubTypeDict
+ADD PRIMARY KEY (productSubType_id);
+
+
+
+CREATE TABLE ProductTypeDict
+(
+	productType_id       INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(128) NOT NULL
+);
+
+
+
+ALTER TABLE ProductTypeDict
+ADD PRIMARY KEY (productType_id);
+
+
+
+CREATE TABLE PStatusDict
+(
+	productStatus_id     INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(20) NULL
+);
+
+
+
+ALTER TABLE PStatusDict
+ADD PRIMARY KEY (productStatus_id);
+
+
+
+CREATE TABLE ReservationDetail
+(
+	barcode              INTEGER NOT NULL,
+	qty                  INTEGER NULL,
+	reservation_id       INTEGER NOT NULL
+);
+
+
+
+ALTER TABLE ReservationDetail
+ADD PRIMARY KEY (barcode,reservation_id);
+
+
+
+CREATE TABLE ReservationHeader
+(
+	reservation_id       INTEGER NOT NULL,
+	saleAbsolute         INTEGER NULL,
+	saleRelative         CHAR(18) NULL,
+	details              VARCHAR(4000) NULL,
+	reservationStatus_id INTEGER NULL,
+	startDate            DATE NULL,
+	endDate              CHAR(18) NULL,
+	reservationType_id   INTEGER NULL,
+	employee_id          INTEGER NULL
+);
+
+
+
+ALTER TABLE ReservationHeader
+ADD PRIMARY KEY (reservation_id);
+
+
+
+CREATE TABLE RStatusDict
+(
+	reservationStatus_id INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(20) NULL
+);
+
+
+
+ALTER TABLE RStatusDict
+ADD PRIMARY KEY (reservationStatus_id);
+
+
+
+CREATE TABLE RTypeDict
+(
+	reservationType_id   INTEGER AUTO_INCREMENT,
+	name                 VARCHAR(20) NULL
+);
+
+
+
+ALTER TABLE RTypeDict
+ADD PRIMARY KEY (reservationType_id);
+
+
+
+CREATE TABLE SupplierDict
+(
+	city_id              INTEGER NULL,
+	name                 VARCHAR(20) NULL,
+	address              VARCHAR(20) NULL,
+	supplier_id          INTEGER AUTO_INCREMENT
+);
+
+
+
+ALTER TABLE SupplierDict
+ADD PRIMARY KEY (supplier_id);
+
+
+
+ALTER TABLE CityDict
+ADD FOREIGN KEY R_24 (country_id) REFERENCES CountryDict (country_id);
+
+
+
+ALTER TABLE InvoiceHeader
+ADD FOREIGN KEY R_13 (supplier_id) REFERENCES SupplierDict (supplier_id);
+
+
+
+ALTER TABLE InvoiceHeader
+ADD FOREIGN KEY R_53 (invoiceStatus_id) REFERENCES IStatusDict (invoiceStatus_id);
+
+
+
+ALTER TABLE ManufacturerDict
+ADD FOREIGN KEY R_23 (country_id) REFERENCES CountryDict (country_id);
+
+
+
+ALTER TABLE OrderDetail
+ADD FOREIGN KEY R_20 (order_id) REFERENCES OrderHeader (order_id);
+
+
+
+ALTER TABLE OrderDetail
+ADD FOREIGN KEY R_47 (product_id) REFERENCES ProductDict (product_id);
+
+
+
+ALTER TABLE OrderDetail
+ADD FOREIGN KEY R_84 (supplier_id) REFERENCES SupplierDict (supplier_id);
+
+
+
+ALTER TABLE OrderHeader
+ADD FOREIGN KEY R_51 (orderStatus_id) REFERENCES OStatusDict (orderStatus_id);
+
+
+
+ALTER TABLE Product
+ADD FOREIGN KEY R_6 (product_id) REFERENCES ProductDict (product_id);
+
+
+
+ALTER TABLE Product
+ADD FOREIGN KEY R_45 (invoice_id) REFERENCES InvoiceHeader (invoice_id);
+
+
+
+ALTER TABLE Product
+ADD FOREIGN KEY R_71 (productStatus_id) REFERENCES PStatusDict (productStatus_id);
+
+
+
+ALTER TABLE ProductBuyPrice
+ADD FOREIGN KEY R_1 (barcode) REFERENCES Product (barcode);
+
+
+
+ALTER TABLE ProductDict
+ADD FOREIGN KEY R_36 (manufacturer_id) REFERENCES ManufacturerDict (manufacturer_id);
+
+
+
+ALTER TABLE ProductDict
+ADD FOREIGN KEY R_49 (productSubType_id) REFERENCES ProductSubTypeDict (productSubType_id);
+
+
+
+ALTER TABLE ProductSellPrice
+ADD FOREIGN KEY R_2 (barcode) REFERENCES Product (barcode);
+
+
+
+ALTER TABLE ProductSubTypeDict
+ADD FOREIGN KEY R_38 (productType_id) REFERENCES ProductTypeDict (productType_id);
+
+
+
+ALTER TABLE ReservationDetail
+ADD FOREIGN KEY R_35 (barcode) REFERENCES Product (barcode);
+
+
+
+ALTER TABLE ReservationDetail
+ADD FOREIGN KEY R_34 (reservation_id) REFERENCES ReservationHeader (reservation_id);
+
+
+
+ALTER TABLE ReservationHeader
+ADD FOREIGN KEY R_52 (reservationStatus_id) REFERENCES RStatusDict (reservationStatus_id);
+
+
+
+ALTER TABLE ReservationHeader
+ADD FOREIGN KEY R_60 (reservationType_id) REFERENCES RTypeDict (reservationType_id);
+
+
+
+ALTER TABLE ReservationHeader
+ADD FOREIGN KEY R_79 (employee_id) REFERENCES EmployeeDict (employee_id);
+
+
+
+ALTER TABLE SupplierDict
+ADD FOREIGN KEY R_10 (city_id) REFERENCES CityDict (city_id);
