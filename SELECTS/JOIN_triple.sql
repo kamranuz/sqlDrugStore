@@ -1,0 +1,1 @@
+select * from Product p inner join (select pd.product_id, pd.name as pname, md.name as mname from ProductDict pd inner join ManufacturerDict md on md.manufacturer_id=pd.manufacturer_id) sel on sel.product_id=p.product_id;
