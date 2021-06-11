@@ -1,0 +1,7 @@
+SELECT sum(psp.sellPrice * rd.qty)
+		from ProductSellPrice psp 
+		inner join ReservationDetail rd 
+		on psp.barcode = rd.barcode 
+		inner join ReservationHeader rh 
+		on rd.reservation_id  = rh.reservation_id 
+		where (psp.barcode = rd.barcode) and (rh.reservationStatus_id = 2)
