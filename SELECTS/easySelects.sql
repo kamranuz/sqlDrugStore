@@ -5,7 +5,8 @@ SELECT
   MAX(total) 'максимальная сумма', 
   MIN(total) 'минимальная сумма', 
   SUM(total) 'сумма всех инвойсов', 
-  STDEV(total) 'стандартное отклонение суммы'
+  STDEV(total) 'стандартное отклонение суммы',
+  6*STDEV(total) 'охват в 3 сигмы',
 FROM InvoiceHeader
 WHERE date BETWEEN  '2021-01-01' and '2022-01-01';
 
