@@ -1,6 +1,6 @@
 INSERT INTO CountryDict(country_id, name)
 VALUES
-	(0,N'Unknown country'),
+	(280,N'Unknown country'),
 	(1,N'Australia'),
 	(2,N'Austria'),
 	(3,N'Azerbaijan'),
