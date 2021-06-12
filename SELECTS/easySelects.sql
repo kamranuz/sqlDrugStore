@@ -108,15 +108,10 @@ FROM
 													 GROUP BY employee_id 
 												 ) AS total2
 	 )
-	 ORDER BY total DESC;
-	 
-	 
-	 
-	 
-	 
+	 ORDER BY total DESC;	 
 
 
---7 Query with set operation|| For info look table in googel docs...
+--16 Query with set operation|| For info look table in googel docs...
 SELECT barcode FROM Product p2 
 EXCEPT
 SELECT barcode FROM ProductSellPrice psp;
