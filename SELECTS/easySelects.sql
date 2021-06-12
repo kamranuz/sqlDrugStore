@@ -76,3 +76,36 @@ FROM
 		 	ON rd.barcode = psp.barcode
 		 GROUP BY reservation_id
 	 ) AS r_total;
+
+
+
+
+--7 Subquery in FROM with agregate and ordering || For info look table in googel docs...
+ SELECT employee_id, total
+ FROM 
+	 (
+		 SELECT
+		 	employee_id ,
+		 	SUM(qty*sellPrice) AS total
+		 FROM 
+		 	ReservationDetail rd 
+		 	LEFT JOIN 
+		 	ProductSellPrice psp ON rd.barcode = psp.barcode
+		 	LEFT JOIN 
+		 	ReservationHeader rh ON rh.reservation_id = rd.reservation_id 
+		 GROUP BY employee_id 
+	 ) AS total
+	 WHERE total.total > (SELECT AVG(total) FROM (
+													 SELECT
+													 	employee_id ,
+													 	SUM(qty*sellPrice) AS total
+													 FROM 
+													 	ReservationDetail rd 
+													 	LEFT JOIN 
+													 	ProductSellPrice psp ON rd.barcode = psp.barcode
+													 	LEFT JOIN 
+													 	ReservationHeader rh ON rh.reservation_id = rd.reservation_id 
+													 GROUP BY employee_id 
+												 ) AS total2
+	 )
+	 ORDER BY total DESC;
