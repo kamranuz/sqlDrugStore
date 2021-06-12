@@ -102,3 +102,21 @@ as begin
 end
 
 exec MasterOrder 12, 3, 2, 1, 'Insert'
+
+create procedure Total 
+@Reservation_id int,
+@total decimal OUTPUT 
+as begin 
+	SET NOCOUNT ON;  
+	SELECT @total = SUM(qty*sellPrice) FROM
+		ReservationDetail rd
+		LEFT JOIN
+		ProductSellPrice psp
+		ON rd.barcode = psp.barcode
+		where rd.reservation_id = @Reservation_id
+	RETURN 
+end
+
+declare @totalsum decimal; --обязательно выполнить все три строчки вместе
+exec Total @Reservation_id = 1, @total = @totalsum OUTPUT; 
+select @totalsum 
