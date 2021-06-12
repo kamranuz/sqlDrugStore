@@ -1,2 +1,2 @@
---вывод названия товара в списке товарного запаса
+--РІС‹РІРѕРґ РЅР°Р·РІР°РЅРёСЏ С‚РѕРІР°СЂР° РІ СЃРїРёСЃРєРµ С‚РѕРІР°СЂРЅРѕРіРѕ Р·Р°РїР°СЃР°
 SELECT *, (SELECT name from ProductDict pd where p.product_id=pd.product_id) from Product p; 
