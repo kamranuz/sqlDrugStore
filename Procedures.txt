@@ -1,0 +1,104 @@
+create PROCEDURE ProductInsertCheck 
+(@p_id int, 
+@barcode int,
+@i_id int,
+@q int,
+@p_status int)
+as 
+begin 
+	if not exists (select * from InvoiceHeader i where i.invoice_id = @i_id)
+	begin
+		RAISERROR ('Invoice does not exist, please create invoice first', 16, 1);
+		ROLLBACK TRAN 
+	END
+	if not exists (select * from PStatusDict d where d.productStatus_id = @p_status)
+	begin
+		RAISERROR ('Status does not exist', 16, 1);
+		ROLLBACK TRAN 
+	END
+	if exists (select * from Product p where p.barcode = @barcode)
+	begin
+		RAISERROR ('Barcode already in the system', 16, 1);
+		ROLLBACK TRAN 
+	END
+	else 
+	begin 
+	insert into Product values (@p_id, @barcode, @i_id, @q, @p_status)
+	end 
+end
+
+exec ProductInsertCheck 155, 113, 58, 3, 5
+
+CREATE PROCEDURE ReservationDetailInsertCheck 
+(@barcode int,
+@qty int,
+@r_id int)
+AS 
+begin  
+	if not exists (select * from ReservationHeader rh where rh.reservation_id = @r_id)
+	begin
+		RAISERROR ('Reservation does not exist, please create one first', 16, 1);
+		ROLLBACK TRAN 
+	END
+	if @qty <= 0 
+	begin 
+		RAISERROR ('Quantity should be greater than 0', 16, 1);
+		ROLLBACK TRAN 
+	end
+	if not exists (select * from ProductSellPrice psp where psp.barcode = @barcode)
+	begin
+		RAISERROR ('Product is not estimated yet', 16, 1);
+		ROLLBACK TRAN 
+	END
+	if exists (select * from ReservationDetail rd where (rd.barcode = @barcode) and (rd.reservation_id = @r_id))
+	begin 
+		RAISERROR ('This product already added', 16, 1);
+		ROLLBACK TRAN 
+	end
+	else 
+	begin 
+		INSERT into ReservationDetail values (@barcode, @qty, @r_id)
+	end
+end
+
+exec ReservationDetailInsertCheck 113, 10, 50
+
+create procedure MasterOrder 
+(@o_id int,
+@q int,
+@p_id int,
+@s_id int,
+@operation nvarchar(20)) 
+as begin 
+	begin try
+	begin transaction
+	if @operation = 'Insert'
+	begin 
+		insert into OrderDetail values (@o_id, @q, @p_id, @s_id)
+	end
+	if @operation = 'Select' 
+	begin 
+		select * from OrderDetail
+		where (order_id = @o_id) and (supplier_id = @s_id) and (product_id = @p_id)
+	end
+	if @operation = 'Update'  
+	begin 
+		update OrderDetail
+		set  
+			qty = @q
+		where (order_id = @o_id) and (supplier_id = @s_id) and (product_id = @p_id)
+	end
+	else if @operation = 'Delete'
+	begin 
+		delete from OrderDetail
+		where (order_id = @o_id) and (supplier_id = @s_id) and (product_id = @p_id)
+	end
+	commit transaction 
+	end try 
+	begin catch 
+	select ERROR_MESSAGE() as Error 
+	rollback transaction 
+	end catch 
+end
+
+exec MasterOrder 12, 3, 2, 1, 'Insert'
