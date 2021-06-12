@@ -50,3 +50,29 @@ FROM
 	LEFT JOIN 
 	ProductSellPrice psp 
 	ON rd.barcode = psp.barcode;
+	
+	
+	
+
+--5 Subquery in FROM || For info look table in googel docs...
+SELECT 
+	COUNT(total) 'количество', 
+	AVG(total) 'средняя сумма', 
+	MAX(total) 'максимальная сумма', 
+	MIN(total) 'минимальна я сумма', 
+	SUM(total) 'сумма всех инвойсов', 
+	STDEV(total) 'стандартное отклонение суммы',
+	AVG(total)-3*STDEV(total) 'нижний охват в 3 сигмы',
+	AVG(total)+3*STDEV(total) 'верхний охват в 3 сигмы'
+FROM 
+	 (
+		 SELECT
+		 	reservation_id AS r_id,
+		 	SUM(qty*sellPrice) AS total
+		 FROM 
+		 	ReservationDetail rd 
+		 	LEFT JOIN 
+		 	ProductSellPrice psp 
+		 	ON rd.barcode = psp.barcode
+		 GROUP BY reservation_id
+	 ) AS r_total;
