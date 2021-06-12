@@ -115,3 +115,30 @@ FROM
 SELECT barcode FROM Product p2 
 EXCEPT
 SELECT barcode FROM ProductSellPrice psp;
+
+
+--18 Query with outer join and NULL Check|| For info look table in googel docs...
+SELECT order_id, od.product_id, supplier_id, od.qty
+	FROM
+		(
+			SELECT 
+				price.barcode as barcode, 
+				buyPrice 
+			FROM
+				(
+					SELECT
+						barcode,
+						MAX(start) AS date
+					FROM
+						ProductBuyPrice pbp
+					GROUP BY barcode
+				) AS price
+				LEFT JOIN 
+				ProductBuyPrice pbp2 
+				ON price.barcode = pbp2.barcode 
+				WHERE price.date = pbp2.[start]
+		) AS price
+		LEFT JOIN Product p ON price.barcode = p.barcode
+		RIGHT JOIN OrderDetail od ON od.product_id = p.product_id
+		WHERE p.product_id IS NULL;
+
