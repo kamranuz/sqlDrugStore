@@ -25,3 +25,28 @@ FROM
 	LEFT JOIN 
 	OrderHeader oh 
 	ON od.order_id = oh.order_id;
+
+
+
+--4 Co-related query in Select || For info look table in googel docs...
+-- MAKES THE SAME STUFF AS GROUP BY HERE:
+-- SELECT
+-- 	reservation_id,
+-- 	SUM(qty*sellPrice)
+-- FROM 
+-- 	ReservationDetail rd 
+-- 	LEFT JOIN 
+-- 	ProductSellPrice psp 
+-- 	ON rd.barcode = psp.barcode
+-- GROUP BY reservation_id;
+SELECT DISTINCT 
+	reservation_id,
+	(SELECT SUM(qty*sellPrice) 
+		FROM ReservationDetail rd2 LEFT JOIN ProductSellPrice psp2 
+		ON rd2.barcode = psp2.barcode
+		WHERE rd2.reservation_id = rd.reservation_id)
+FROM 
+	ReservationDetail rd 
+	LEFT JOIN 
+	ProductSellPrice psp 
+	ON rd.barcode = psp.barcode;
