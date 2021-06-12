@@ -109,3 +109,14 @@ FROM
 												 ) AS total2
 	 )
 	 ORDER BY total DESC;
+	 
+	 
+	 
+	 
+	 
+
+
+--7 Query with set operation|| For info look table in googel docs...
+SELECT barcode FROM Product p2 
+EXCEPT
+SELECT barcode FROM ProductSellPrice psp;
