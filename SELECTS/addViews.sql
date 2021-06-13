@@ -46,9 +46,9 @@ AS
 	SELECT 
 		sd.name	AS 'Поставщик',
 		ih.invoice_id AS 'Номер Инвойса',
+		id.name AS 'Статус',
 		ih.[date] AS 'Дата Инвойса',
-		ih.total AS 'Сумма Инвойса',
-		id.name AS 'Статус'
+		ih.total AS 'Сумма Инвойса'
 	FROM InvoiceHeader ih
 	LEFT JOIN SupplierDict sd ON ih.supplier_id = sd.supplier_id
 	LEFT JOIN IStatusDict id ON ih.invoiceStatus_id = id.invoiceStatus_id;
