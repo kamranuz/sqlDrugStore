@@ -102,7 +102,6 @@ as begin
 end
 
 exec MasterOrder 12, 3, 2, 1, 'Insert'
-
 create procedure Total 
 @Reservation_id int,
 @total decimal OUTPUT 
@@ -114,6 +113,9 @@ as begin
 		ProductSellPrice psp
 		ON rd.barcode = psp.barcode
 		where rd.reservation_id = @Reservation_id
+	UPDATE ReservationHeader 
+	set Total = @total 
+	where reservation_id = @Reservation_id
 	RETURN 
 end
 
@@ -132,6 +134,9 @@ as begin
 	select @saleRelative = (select rh.saleRelative from ReservationHeader rh where rh.reservation_id = @Reservation_id)
 	select @saleAbsolute = (select rh.saleAbsolute from ReservationHeader rh where rh.reservation_id = @Reservation_id)
 	select @totalafterdiscount = @totalsum*(1 + @saleRelative) - @saleAbsolute
+	UPDATE ReservationHeader 
+	set Total = @totalafterdiscount 
+	where reservation_id = @Reservation_id
 	return 
 end
 
