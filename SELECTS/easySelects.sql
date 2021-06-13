@@ -140,3 +140,16 @@ FROM
 	LEFT JOIN Product p ON price.barcode = p.barcode
 	RIGHT JOIN OrderDetail od ON od.product_id = p.product_id 
 WHERE p.product_id IS NULL;
+
+
+--20 Query with having|| For info look table in googel docs...
+SELECT 
+	pstd.productSubType_id AS 'id Типа',
+	pstd.name AS 'Название типа',
+	COUNT(*) AS N'Количетво Товаров с таким типом'
+FROM 
+	ProductDict pd
+	LEFT JOIN ProductSubTypeDict pstd ON pd.productSubType_id = pstd.productSubType_id
+GROUP BY pstd.productSubType_id, pstd.name
+HAVING COUNT(*) <= 5
+ORDER BY COUNT(*) ASC;
