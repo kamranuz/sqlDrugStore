@@ -36,3 +36,19 @@ AS
 		LEFT JOIN ManufacturerDict md 	ON md.manufacturer_id = pd.manufacturer_id
 		LEFT JOIN InvoiceHeader ih 		ON ih.invoice_id = p2.invoice_id 
 		LEFT JOIN SupplierDict sd 		ON sd.supplier_id = ih.supplier_id;
+		
+		
+		
+-- SECOND VIEW
+
+CREATE VIEW ReportInvoicesMain
+AS
+	SELECT 
+		sd.name	AS 'Поставщик',
+		ih.invoice_id AS 'Номер Инвойса',
+		ih.[date] AS 'Дата Инвойса',
+		ih.total AS 'Сумма Инвойса',
+		id.name AS 'Статус'
+	FROM InvoiceHeader ih
+	LEFT JOIN SupplierDict sd ON ih.supplier_id = sd.supplier_id
+	LEFT JOIN IStatusDict id ON ih.invoiceStatus_id = id.invoiceStatus_id;
