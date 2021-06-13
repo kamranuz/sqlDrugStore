@@ -120,3 +120,21 @@ end
 declare @totalsum decimal; --обязательно выполнить все три строчки вместе
 exec Total @Reservation_id = 1, @total = @totalsum OUTPUT; 
 select @totalsum 
+
+create procedure TotalAfterDiscount 
+@Reservation_id int,
+@totalafterdiscount decimal output
+as begin 
+	SET NOCOUNT ON; 
+	declare @totalsum decimal, @saleRelative decimal, @saleAbsolute decimal; --??????????? ????????? ??? ??? ??????? ??????
+	exec Total @Reservation_id = @Reservation_id, @total = @totalsum OUTPUT; 
+	select @totalsum = @totalsum 
+	select @saleRelative = (select rh.saleRelative from ReservationHeader rh where rh.reservation_id = @Reservation_id)
+	select @saleAbsolute = (select rh.saleAbsolute from ReservationHeader rh where rh.reservation_id = @Reservation_id)
+	select @totalafterdiscount = @totalsum*(1 + @saleRelative) - @saleAbsolute
+	return 
+end
+
+declare @totalsum decimal; --??????????? ????????? ??? ??? ??????? ??????
+exec TotalAfterDiscount @Reservation_id = 1, @totalafterdiscount = @totalsum OUTPUT; 
+select @totalsum 
