@@ -80,6 +80,10 @@ FROM
 
 
 
+--6 вывод названия товара в списке товарного запаса
+SELECT *, (SELECT name from ProductDict pd where p.product_id=pd.product_id) from Product p; 
+
+
 
 --7 Subquery in FROM with agregate and ordering || For info look table in googel docs...
  SELECT employee_id, total
@@ -111,6 +115,13 @@ FROM
 	 )
 	 ORDER BY total DESC;	 
 
+  
+-- 8 если цена выше средней со средней ценой продажи товара 
+select p.barcode, AVG(psp.sellPrice) as p_average  from Product p 
+inner join ProductSellPrice psp on p.barcode=psp.barcode 
+WHERE sellPrice > (SELECT  AVG(sellPrice) from ProductSellPrice psp2) 
+group by p.barcode
+ORDER by p_average ASC;
 
 -- 9 Запрос с коррелированным подзапросом в WHERE
 --список всех заказов, где покупатели приобрели меньше 15% от общих продаж определенного товара, чтобы выявить наименее популярные товары
@@ -142,6 +153,15 @@ from ProductBuyPrice pbp
 	inner join Product p on p.barcode=pbp.barcode
 	inner join ProductDict pd on pd.product_id=p.product_id
 ) as a where a.finish is null;
+
+-- 12 количество поставщиков по странам
+select cd.name, COUNT(md.manufacturer_id) as amount from CountryDict cd inner join ManufacturerDict md on md.country_id=cd.country_id GROUP by cd.name; 
+
+-- 13 количество накладных по поставщикам
+select sd.name, COUNT(ih.invoice_id) from SupplierDict sd inner join InvoiceHeader ih on ih.supplier_id=sd.supplier_id GROUP BY sd.name;
+
+-- 14 позиции по количеству в заказе
+select pd.name, SUM(od.qty) as 'total ordered' from OrderDetail od inner join ProductDict pd on pd.product_id=od.product_id GROUP BY pd.name;
 
 -- 15 Запрос с EXISTS
 --находим все продукты, которые когда либо были заказаны, чтобы можно было вести учет продаж
@@ -182,6 +202,11 @@ FROM
 	RIGHT JOIN OrderDetail od ON od.product_id = p.product_id 
 WHERE p.product_id IS NULL;
 
+-- 18 выручка по отдельному товару
+select pd.name, SUM(psp.sellPrice) from Product p 
+inner join ProductDict pd on pd.product_id=p.product_id and p.productStatus_id=3 
+inner join ProductSellPrice psp on psp.barcode=p.barcode 
+GROUP BY pd.name;
 
 --19
 select 
@@ -220,30 +245,3 @@ select * from #ResTempTable;
 SELECT COUNT(*)
     FROM EmployeeDict ed
     WHERE name = 'Emma';
-
---вывод названия товара в списке товарного запаса
-SELECT *, (SELECT name from ProductDict pd where p.product_id=pd.product_id) from Product p; 
-
-  
---если цена выше средней со средней ценой продажи товара 
-select p.barcode, AVG(psp.sellPrice) as p_average  from Product p 
-inner join ProductSellPrice psp on p.barcode=psp.barcode 
-WHERE sellPrice > (SELECT  AVG(sellPrice) from ProductSellPrice psp2) 
-group by p.barcode
-ORDER by p_average ASC;
-
-
---количество поставщиков по странам
-select cd.name, COUNT(md.manufacturer_id) as amount from CountryDict cd inner join ManufacturerDict md on md.country_id=cd.country_id GROUP by cd.name; 
-
---количество накладных по поставщикам
-select sd.name, COUNT(ih.invoice_id) from SupplierDict sd inner join InvoiceHeader ih on ih.supplier_id=sd.supplier_id GROUP BY sd.name;
-
---позиции по количеству в заказе
-select pd.name, SUM(od.qty) as 'total ordered' from OrderDetail od inner join ProductDict pd on pd.product_id=od.product_id GROUP BY pd.name;
-
---выручка по отдельному товару
-select pd.name, SUM(psp.sellPrice) from Product p 
-inner join ProductDict pd on pd.product_id=p.product_id and p.productStatus_id=3 
-inner join ProductSellPrice psp on psp.barcode=p.barcode 
-GROUP BY pd.name;
