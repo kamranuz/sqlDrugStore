@@ -153,3 +153,9 @@ FROM
 GROUP BY pstd.productSubType_id, pstd.name
 HAVING COUNT(*) <= 5
 ORDER BY COUNT(*) ASC;
+
+
+-- 22
+SELECT COUNT(*)
+    FROM EmployeeDict ed
+    WHERE name = 'Emma';
