@@ -1,3 +1,12 @@
+--0
+SELECT sum(psp.sellPrice * rd.qty)
+		from ProductSellPrice psp 
+		inner join ReservationDetail rd 
+		on psp.barcode = rd.barcode 
+		inner join ReservationHeader rh 
+		on rd.reservation_id  = rh.reservation_id 
+		where (psp.barcode = rd.barcode) and (rh.reservationStatus_id = 2)
+
 --1 Easy select with condition and math. || All propereties of sum of invoices in 2021
 SELECT 
   COUNT(total) 'количество', 
@@ -11,9 +20,11 @@ SELECT
 FROM InvoiceHeader
 WHERE date BETWEEN  '2021-01-01' and '2022-01-01';
 
---2 Easy select with condition and math. || The list of invoices, which is the sum is  in 2021
-SELECT * 
-FROM InvoiceHeaderWHERE total NOT BETWEEN total-3* STDEV(total) and total+3* STDEV(total);
+--2
+select SUM(qty) Products_in_Stock
+from Product 
+where productStatus_id = 2
+
 
 
 --3 Co-related query in Select || For info look table in googel docs...
@@ -29,16 +40,6 @@ FROM
 
 
 --4 Co-related query in Select || For info look table in googel docs...
--- MAKES THE SAME STUFF AS GROUP BY HERE:
--- SELECT
--- 	reservation_id,
--- 	SUM(qty*sellPrice)
--- FROM 
--- 	ReservationDetail rd 
--- 	LEFT JOIN 
--- 	ProductSellPrice psp 
--- 	ON rd.barcode = psp.barcode
--- GROUP BY reservation_id;
 SELECT DISTINCT 
 	reservation_id,
 	(SELECT SUM(qty*sellPrice) 
@@ -111,6 +112,46 @@ FROM
 	 ORDER BY total DESC;	 
 
 
+-- 9 Запрос с коррелированным подзапросом в WHERE
+--список всех заказов, где покупатели приобрели меньше 15% от общих продаж определенного товара, чтобы выявить наименее популярные товары
+select distinct reservation_id
+  from [ReservationDetail] RD
+	where 
+		qty <= (select avg(qty)  *  .15
+			from [ReservationDetail] 
+			where RD.barcode = barcode)
+
+-- 10 Запрос с коррелированным подзапросом в WHERE
+--находим всех сотрудников с зарплатой больше средней
+SELECT employee_id, name, salary
+FROM EmployeeDict 
+WHERE salary > (SELECT AVG(salary) from EmployeeDict )
+
+-- 11 lag query
+select barcode, name, prev, sellPrice, isHIgher from (
+select pbp.barcode, pbp.finish , p.product_id, pd.name, 
+	lag(pbp.sellPrice) over (ORDER by pbp.start) as prev,
+	pbp.sellPrice, isHigher =
+		CASE
+			when pbp.sellPrice > lag(pbp.sellPrice) over (ORDER by pbp.start) then 'higher'
+			when pbp.sellPrice < lag(pbp.sellPrice) over (ORDER by pbp.start) then 'lower'
+			else 'Prev price is null'
+		END 
+
+from ProductBuyPrice pbp
+	inner join Product p on p.barcode=pbp.barcode
+	inner join ProductDict pd on pd.product_id=p.product_id
+) as a where a.finish is null;
+
+-- 15 Запрос с EXISTS
+--находим все продукты, которые когда либо были заказаны, чтобы можно было вести учет продаж
+SELECT barcode, product_id
+  FROM Product
+ WHERE EXISTS 
+  (SELECT *
+     FROM ReservationDetail
+    WHERE Product.barcode = ReservationDetail.barcode); 
+
 --16 Query with set operation|| For info look table in googel docs...
 SELECT barcode FROM Product p2 
 EXCEPT
@@ -142,6 +183,13 @@ FROM
 WHERE p.product_id IS NULL;
 
 
+--19
+select 
+	SUM(CASE when rh.reservationType_id = 1 then 1 else 0 end) Online_order,
+	SUM(case when rh.reservationType_id = 2 then 1 else 0 end) Offline_order,
+	SUM(case when rh.reservationType_id = 3 then 1 else 0 end) Phone_order
+from ReservationHeader rh 
+
 --20 Query with having|| For info look table in googel docs...
 SELECT 
 	pstd.productSubType_id AS 'id Типа',
@@ -154,27 +202,24 @@ GROUP BY pstd.productSubType_id, pstd.name
 HAVING COUNT(*) <= 5
 ORDER BY COUNT(*) ASC;
 
+--21
+DECLARE @ResTableVar table(  
+    Res_id INT not null,  
+    OldTotal decimal,  
+    NewTotal decimal); 
+UPDATE TOP (2) ReservationHeader 
+SET Total = Total * 0.25   
+OUTPUT INSERTED.reservation_id,  
+       DELETED.Total,    
+       INSERTED.Total  
+INTO @ResTableVar;  
+SELECT * into #ResTempTable FROM @ResTableVar; 
+select * from #ResTempTable;
 
 -- 22
 SELECT COUNT(*)
     FROM EmployeeDict ed
     WHERE name = 'Emma';
-    
--- lag query
-select barcode, name, prev, sellPrice, isHIgher from (
-select pbp.barcode, pbp.finish , p.product_id, pd.name, 
-	lag(pbp.sellPrice) over (ORDER by pbp.start) as prev,
-	pbp.sellPrice, isHigher =
-		CASE
-			when pbp.sellPrice > lag(pbp.sellPrice) over (ORDER by pbp.start) then 'higher'
-			when pbp.sellPrice < lag(pbp.sellPrice) over (ORDER by pbp.start) then 'lower'
-			else 'Prev price is null'
-		END 
-
-from ProductBuyPrice pbp
-	inner join Product p on p.barcode=pbp.barcode
-	inner join ProductDict pd on pd.product_id=p.product_id
-) as a where a.finish is null;
 
 --вывод названия товара в списке товарного запаса
 SELECT *, (SELECT name from ProductDict pd where p.product_id=pd.product_id) from Product p; 
@@ -202,65 +247,3 @@ select pd.name, SUM(psp.sellPrice) from Product p
 inner join ProductDict pd on pd.product_id=p.product_id and p.productStatus_id=3 
 inner join ProductSellPrice psp on psp.barcode=p.barcode 
 GROUP BY pd.name;
-
-
-
-
--- 9 Запрос с коррелированным подзапросом в WHERE
---список всех заказов, где покупатели приобрели меньше 15% от общих продаж определенного товара, чтобы выявить наименее популярные товары
-select distinct reservation_id
-  from [ReservationDetail] RD
-	where 
-		qty <= (select avg(qty)  *  .15
-			from [ReservationDetail] 
-			where RD.barcode = barcode)
-
--- 10 Запрос с коррелированным подзапросом в WHERE
---находим всех сотрудников с зарплатой больше средней
-SELECT employee_id, name, salary
-FROM EmployeeDict 
-WHERE salary > (SELECT AVG(salary) from EmployeeDict )
-	
--- 15 Запрос с EXISTS
---находим все продукты, которые когда либо были заказаны, чтобы можно было вести учет продаж
-SELECT barcode, product_id
-  FROM Product
- WHERE EXISTS 
-  (SELECT *
-     FROM ReservationDetail
-    WHERE Product.barcode = ReservationDetail.barcode); 
-    
---0
-SELECT sum(psp.sellPrice * rd.qty)
-		from ProductSellPrice psp 
-		inner join ReservationDetail rd 
-		on psp.barcode = rd.barcode 
-		inner join ReservationHeader rh 
-		on rd.reservation_id  = rh.reservation_id 
-		where (psp.barcode = rd.barcode) and (rh.reservationStatus_id = 2)
-
---2
-select SUM(qty) Products_in_Stock
-from Product 
-where productStatus_id = 2
-
---19
-select 
-	SUM(CASE when rh.reservationType_id = 1 then 1 else 0 end) Online_order,
-	SUM(case when rh.reservationType_id = 2 then 1 else 0 end) Offline_order,
-	SUM(case when rh.reservationType_id = 3 then 1 else 0 end) Phone_order
-from ReservationHeader rh 
-
---21
-DECLARE @ResTableVar table(  
-    Res_id INT not null,  
-    OldTotal decimal,  
-    NewTotal decimal); 
-UPDATE TOP (2) ReservationHeader 
-SET Total = Total * 0.25   
-OUTPUT INSERTED.reservation_id,  
-       DELETED.Total,    
-       INSERTED.Total  
-INTO @ResTableVar;  
-SELECT * into #ResTempTable FROM @ResTableVar; 
-select * from #ResTempTable;
