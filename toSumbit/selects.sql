@@ -12,8 +12,8 @@ FROM InvoiceHeader
 WHERE date BETWEEN  '2021-01-01' and '2022-01-01';
 
 --2 Easy select with condition and math. || The list of invoices, which is the sum is  in 2021
--- SELECT * FROM InvoiceHeader
--- WHERE total NOT BETWEEN total-3* STDEV(total) and total+3* STDEV(total);
+SELECT * 
+FROM InvoiceHeaderWHERE total NOT BETWEEN total-3* STDEV(total) and total+3* STDEV(total);
 
 
 --3 Co-related query in Select || For info look table in googel docs...
