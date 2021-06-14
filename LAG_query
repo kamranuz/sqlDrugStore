@@ -1,10 +1,10 @@
-select barcode, name, prev, sellPrice, isHIgher from (
+select barcode, name, prev, buyPrice, isHIgher from (
 select pbp.barcode, pbp.finish , p.product_id, pd.name, 
-	lag(pbp.sellPrice) over (ORDER by pbp.start) as prev,
-	pbp.sellPrice, isHigher =
+	lag(pbp.buyPrice) over (ORDER by pbp.start) as prev,
+	pbp.buyPrice, isHigher =
 		CASE
-			when pbp.sellPrice > lag(pbp.sellPrice) over (ORDER by pbp.start) then 'higher'
-			when pbp.sellPrice < lag(pbp.sellPrice) over (ORDER by pbp.start) then 'lower'
+			when pbp.buyPrice > lag(pbp.buyPrice) over (ORDER by pbp.start) then 'higher'
+			when pbp.buyPrice < lag(pbp.buyPrice) over (ORDER by pbp.start) then 'lower'
 			else 'Prev price is null'
 		END 
 
