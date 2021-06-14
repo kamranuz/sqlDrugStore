@@ -1,3 +1,4 @@
+--0
 SELECT sum(psp.sellPrice * rd.qty)
 		from ProductSellPrice psp 
 		inner join ReservationDetail rd 
@@ -5,3 +6,29 @@ SELECT sum(psp.sellPrice * rd.qty)
 		inner join ReservationHeader rh 
 		on rd.reservation_id  = rh.reservation_id 
 		where (psp.barcode = rd.barcode) and (rh.reservationStatus_id = 2)
+
+--2
+select SUM(qty) Products_in_Stock
+from Product 
+where productStatus_id = 2
+
+--19
+select 
+	SUM(CASE when rh.reservationType_id = 1 then 1 else 0 end) Online_order,
+	SUM(case when rh.reservationType_id = 2 then 1 else 0 end) Offline_order,
+	SUM(case when rh.reservationType_id = 3 then 1 else 0 end) Phone_order
+from ReservationHeader rh 
+
+--21
+DECLARE @ResTableVar table(  
+    Res_id INT not null,  
+    OldTotal decimal,  
+    NewTotal decimal); 
+UPDATE TOP (2) ReservationHeader 
+SET Total = Total * 0.25   
+OUTPUT INSERTED.reservation_id,  
+       DELETED.Total,    
+       INSERTED.Total  
+INTO @ResTableVar;  
+SELECT * into #ResTempTable FROM @ResTableVar; 
+select * from #ResTempTable;
