@@ -1,0 +1,25 @@
+
+
+-- 9 Запрос с коррелированным подзапросом в WHERE
+--список всех заказов, где покупатели приобрели меньше 15% от общих продаж определенного товара, чтобы выявить наименее популярные товары
+select distinct reservation_id
+  from 0DRUGSTORE7.dbo.[ReservationDetail] RD
+	where 
+		qty <= (select avg(qty)  *  .15
+			from 0DRUGSTORE7.dbo.[ReservationDetail] 
+			where RD.barcode = barcode)
+
+-- 10 Запрос с коррелированным подзапросом в WHERE
+--находим всех сотрудников с зарплатой больше средней
+SELECT employee_id, name, salary
+FROM EmployeeDict outer
+	WHERE salary > (SELECT AVG(salary)
+	
+-- 15 Запрос с EXISTS
+--находим все продукты, которые когда либо были заказаны, чтобы можно было вести учет продаж
+SELECT barcode, product_id
+  FROM Product
+ WHERE EXISTS 
+  (SELECT *
+     FROM ReservationDetail
+    WHERE Product.barcode = ReservationDetail.barcode); 
