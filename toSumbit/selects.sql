@@ -139,16 +139,15 @@ FROM EmployeeDict
 WHERE salary > (SELECT AVG(salary) from EmployeeDict )
 
 -- 11 lag query
-select barcode, name, prev, sellPrice, isHIgher from (
+select barcode, name, prev, buyPrice, isHIgher from (
 select pbp.barcode, pbp.finish , p.product_id, pd.name, 
-	lag(pbp.sellPrice) over (ORDER by pbp.start) as prev,
-	pbp.sellPrice, isHigher =
+	lag(pbp.buyPrice) over (ORDER by pbp.start) as prev,
+	pbp.buyPrice, isHigher =
 		CASE
-			when pbp.sellPrice > lag(pbp.sellPrice) over (ORDER by pbp.start) then 'higher'
-			when pbp.sellPrice < lag(pbp.sellPrice) over (ORDER by pbp.start) then 'lower'
+			when pbp.buyPrice > lag(pbp.buyPrice) over (ORDER by pbp.start) then 'higher'
+			when pbp.buyPrice < lag(pbp.buyPrice) over (ORDER by pbp.start) then 'lower'
 			else 'Prev price is null'
 		END 
-
 from ProductBuyPrice pbp
 	inner join Product p on p.barcode=pbp.barcode
 	inner join ProductDict pd on pd.product_id=p.product_id
@@ -178,7 +177,7 @@ EXCEPT
 SELECT barcode FROM ProductSellPrice psp;
 
 
---18 Query with outer join and NULL Check|| For info look table in googel docs...
+--17 Query with outer join and NULL Check|| For info look table in googel docs...
 SELECT od.product_id, od.order_id,  od.qty, od.supplier_id 
 FROM
 	(
